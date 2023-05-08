@@ -9,8 +9,12 @@ import ru.vsu.csf.skofenko.ui.generator.core.AngularComponent;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 @UtilityClass
@@ -21,11 +25,22 @@ public class AngularProjectGenerator {
     private final File cssEndpointTemplate;
 
     static {
+        baseAngularProject = getFolderFile("/angular-base");
+        cssComponentTemplate = getFolderFile("/angular-templates/css/component.css");
+        cssEndpointTemplate = getFolderFile("/angular-templates/css/endpoint.css");
+    }
+
+    private File getFolderFile(String resourceFolder) {
         try {
-            baseAngularProject = new File(AngularProjectGenerator.class.getResource("/angular-base").toURI());
-            cssComponentTemplate = new File(AngularProjectGenerator.class.getResource("/angular-templates/css/component.css").toURI());
-            cssEndpointTemplate = new File(AngularProjectGenerator.class.getResource("/angular-templates/css/endpoint.css").toURI());
-        } catch (URISyntaxException e) {
+            URI uri = AngularProjectGenerator.class.getResource(resourceFolder).toURI();
+            if ("jar".equals(uri.getScheme())) {
+                try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap(), null)){
+                    return fileSystem.getPath(resourceFolder).toFile();
+                }
+            } else {
+                return new File(uri);
+            }
+        } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
@@ -39,7 +54,7 @@ public class AngularProjectGenerator {
         componentDir.mkdirs();
 
         File componentCSS = new File(componentDir, "%s.component.css".formatted(component.getFileName()));
-        FileUtils.copyFile(cssComponentTemplate,componentCSS);
+        FileUtils.copyFile(cssComponentTemplate, componentCSS);
 
         File componentTS = new File(componentDir, "%s.component.ts".formatted(component.getFileName()));
         AngularTemplateRenderer.renderTemplate(componentTS,
