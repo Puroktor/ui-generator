@@ -2,51 +2,25 @@ package ru.vsu.csf.skofenko.ui.generator.render;
 
 import freemarker.template.TemplateException;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.io.FileUtils;
 import ru.vsu.csf.skofenko.ui.generator.api.core.UIComponent;
 import ru.vsu.csf.skofenko.ui.generator.api.core.UIEndpoint;
 import ru.vsu.csf.skofenko.ui.generator.core.AngularComponent;
+import ru.vsu.csf.skofenko.ui.generator.util.JarFileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 @UtilityClass
 public class AngularProjectGenerator {
 
-    private final File baseAngularProject;
-    private final File cssComponentTemplate;
-    private final File cssEndpointTemplate;
-
-    static {
-        baseAngularProject = getFolderFile("/angular-base");
-        cssComponentTemplate = getFolderFile("/angular-templates/css/component.css");
-        cssEndpointTemplate = getFolderFile("/angular-templates/css/endpoint.css");
-    }
-
-    private File getFolderFile(String resourceFolder) {
-        try {
-            URI uri = AngularProjectGenerator.class.getResource(resourceFolder).toURI();
-            if ("jar".equals(uri.getScheme())) {
-                try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap(), null)){
-                    return fileSystem.getPath(resourceFolder).toFile();
-                }
-            } else {
-                return new File(uri);
-            }
-        } catch (IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final String BASE_ANGULAR_PROJECT_PATH = "/angular-base";
+    private static final String CSS_COMPONENT_TEMPLATE_PATH = "/angular-templates/css/component.css";
+    private static final String CSS_ENDPOINT_TEMPLATE_PATH = "/angular-templates/css/endpoint.css";
 
     public void createBaseProject(File destinationProjectDir) throws IOException {
-        FileUtils.copyDirectory(baseAngularProject, destinationProjectDir, false);
+        JarFileUtils.copyFromJar(BASE_ANGULAR_PROJECT_PATH, destinationProjectDir.toPath());
     }
 
     public File createComponent(UIComponent component, File projectDir) throws TemplateException, IOException {
@@ -54,7 +28,7 @@ public class AngularProjectGenerator {
         componentDir.mkdirs();
 
         File componentCSS = new File(componentDir, "%s.component.css".formatted(component.getFileName()));
-        FileUtils.copyFile(cssComponentTemplate, componentCSS);
+        JarFileUtils.copyFromJar(CSS_COMPONENT_TEMPLATE_PATH, componentCSS.toPath());
 
         File componentTS = new File(componentDir, "%s.component.ts".formatted(component.getFileName()));
         AngularTemplateRenderer.renderTemplate(componentTS,
@@ -72,7 +46,7 @@ public class AngularProjectGenerator {
         endpointDir.mkdirs();
 
         File endpointCSS = new File(endpointDir, "%s.component.css".formatted(endpoint.getFileName()));
-        FileUtils.copyFile(cssEndpointTemplate, endpointCSS);
+        JarFileUtils.copyFromJar(CSS_ENDPOINT_TEMPLATE_PATH, endpointCSS.toPath());
 
         File endpointTS = new File(endpointDir, "%s.component.ts".formatted(endpoint.getFileName()));
         AngularTemplateRenderer.renderTemplate(endpointTS,
