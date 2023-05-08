@@ -7,7 +7,8 @@
 	
 	<modules>
 		<module>ui-generator-core</module>
-	</modules>
+        <module>ui-generator-spring-boot-starter</module>
+    </modules>
 
     <groupId>ru.vsu.csf.skofenko</groupId>
     <artifactId>ui-generator</artifactId>
