@@ -7,6 +7,7 @@ import ru.vsu.csf.skofenko.ui.generator.api.core.UIEndpoint;
 import ru.vsu.csf.skofenko.ui.generator.render.AngularProjectGenerator;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -56,6 +57,7 @@ public class AngularUI implements UI {
         try {
             File directory = resourcePath.resolve(FRONTEND_DIR_NAME).toFile();
             File logs = resourcePath.resolve(FRONTEND_LOGS_FILE).toFile();
+            new FileWriter(logs).close();
             new ProcessBuilder("npm.cmd", "install").directory(directory).start().waitFor();
             Process process = new ProcessBuilder("ng.cmd", "serve")
                     .directory(directory)
