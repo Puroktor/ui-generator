@@ -14,11 +14,11 @@ public class FileUtils {
     @SneakyThrows
     public static void copyTo(String source, Path target) {
         URI resource = FileUtils.class.getResource("").toURI();
+        FileSystem fileSystem = null;
         Path filePath;
         if (resource.toString().contains("jar")) {
-            try (FileSystem fileSystem = FileSystems.newFileSystem(resource, Collections.emptyMap())) {
-                filePath = fileSystem.getPath(source);
-            }
+            fileSystem = FileSystems.newFileSystem(resource, Collections.emptyMap());
+            filePath = fileSystem.getPath(source);
         } else {
             filePath = Paths.get(FileUtils.class.getResource(source).toURI());
         }
@@ -36,5 +36,8 @@ public class FileUtils {
                 return FileVisitResult.CONTINUE;
             }
         });
+        if (fileSystem != null) {
+            fileSystem.close();
+        }
     }
 }
