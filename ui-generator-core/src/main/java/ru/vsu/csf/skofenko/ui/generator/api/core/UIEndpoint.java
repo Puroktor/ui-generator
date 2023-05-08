@@ -12,4 +12,5 @@ public interface UIEndpoint {
     UIRequestType getRequestType();
     List<UIField> getQueryParams();
     UIRequestBody getRequestBody();
+    List<UIField> getResponseBody();
 }

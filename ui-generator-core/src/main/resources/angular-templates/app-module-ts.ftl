@@ -5,6 +5,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule}   from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
@@ -48,6 +50,8 @@ import {${endpoint.getScriptName()}Component} from './${component.getFileName()}
         FormsModule,
         ReactiveFormsModule,
 
+        MatSlideToggleModule,
+        MatTableModule,
         MatToolbarModule,
         MatButtonModule,
         MatInputModule,

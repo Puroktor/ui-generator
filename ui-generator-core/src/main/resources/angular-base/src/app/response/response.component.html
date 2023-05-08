@@ -1,4 +1,4 @@
-<div *ngIf="response !== null">
+<div *ngIf="response !== null" class="response-json-container">
     <p [ngClass]="response.ok ? 'response-success' : 'response-error'">
         {{response.status}} {{response.statusText}}
     </p>

@@ -33,6 +33,10 @@ export class ${endpoint.getScriptName()}Component implements OnInit, OnDestroy {
     private requestType: string = '${endpoint.getRequestType().name()}';
     response: any|null = null;
 
+    displayedResponseColumns: string[] = [<#list endpoint.getResponseBody() as responseField>'${responseField.getSubmitName()}',</#list>];
+    responseTableData: any|null = null;
+    jsonResponseType = false;
+
     formGroup = new FormGroup({
     <#list endpoint.getQueryParams() as queryParam>
         <@renderFormCotrol uiField=queryParam prefix="query_"/>
@@ -78,10 +82,12 @@ export class ${endpoint.getScriptName()}Component implements OnInit, OnDestroy {
         this.appService.submitForm(this.requestType, this.mapping, this.formGroup.value).subscribe({
             next: (response: HttpResponse<any>) => {
                 this.response = response;
+                this.responseTableData = [response.body];
                 this.formGroup.enable();
             },
             error: (err: HttpErrorResponse) => {
                 this.response = err;
+                this.responseTableData = null;
                 this.formGroup.enable();
             }
         })

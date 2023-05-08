@@ -60,3 +60,29 @@
 .add-element-btn {
     margin-bottom: 10px;
 }
+
+.response-type-toggle-label {
+    vertical-align: top;
+    display: inline-block;
+    line-height: 24px;
+    margin-right: 5px;
+}
+
+.disabled {
+    display: none;
+}
+
+.response-container {
+    margin-top: 15px;
+    overflow: auto;
+}
+
+.response-header-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.response-header-container > h3 {
+    font-weight: 500;
+}

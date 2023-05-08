@@ -9,6 +9,6 @@ import ru.vsu.csf.skofenko.ui.generator.api.field.UIField;
 public class AngularUIField implements UIField {
     private final String displayName;
     private final String submitName;
-    private final UIField.FieldType fieldType;
+    private final FieldType fieldType;
     private final boolean required;
 }

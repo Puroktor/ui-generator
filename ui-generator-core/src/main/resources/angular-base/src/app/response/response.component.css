@@ -1,3 +1,7 @@
+.response-json-container {
+    padding: 0 10px;
+}
+
 .response-success {
     color: #69F0AEFF;
 }
