@@ -1,0 +1,6 @@
+<div *ngIf="response !== null">
+    <p [ngClass]="response.ok ? 'response-success' : 'response-error'">
+        {{response.status}} {{response.statusText}}
+    </p>
+    <ngx-json-viewer [json]="responseBody"></ngx-json-viewer>
+</div>

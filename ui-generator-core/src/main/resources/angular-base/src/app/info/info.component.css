@@ -1,0 +1,9 @@
+.info-page-container {
+    margin: 0;
+    padding: 0;
+    height: calc(100% - 64px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

@@ -1,0 +1,62 @@
+.long-field {
+    width: 100%;
+}
+
+.float-right {
+    float: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.request-footer {
+    margin-top: 10px;
+    height: 38px;
+}
+
+.checkbox {
+    margin-bottom: 22px;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.label {
+    margin: 20px 10px !important;
+    text-align: center;
+    width: 60px;
+}
+
+.class-container {
+    border: 1px grey dashed;
+    padding: 4px;
+    width: 100%;
+}
+
+.array-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 3;
+    align-items: center;
+    padding: 4px;
+}
+
+.list-form-container {
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+}
+
+.list-form-field {
+    width: 100%;
+}
+
+.remove-element-btn {
+    margin-left: 10px;
+}
+
+.add-element-btn {
+    margin-bottom: 10px;
+}
