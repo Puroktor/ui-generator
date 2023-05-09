@@ -6,7 +6,7 @@
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>ui-generator-core</module>
+        <module>ui-generator-core</module>
         <module>ui-generator-spring-boot-starter</module>
     </modules>
 
