@@ -1,3 +1,0 @@
-# Auto Configure
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-ru.vsu.csf.skofenko.ui.generator.spring.config.StarterUIGeneratorConfig

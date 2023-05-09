@@ -1,5 +1,7 @@
 package ru.vsu.csf.skofenko.ui.generator.spring.component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
@@ -13,7 +15,7 @@ import java.util.Collection;
 
 @Component
 public class UIGeneratorContextListener {
-
+    private final Logger logger = LoggerFactory.getLogger(UIGeneratorContextListener.class);
     private final UIGeneratorProperties uiGeneratorProperties;
 
     public UIGeneratorContextListener(UIGeneratorProperties uiGeneratorProperties) {
@@ -27,8 +29,10 @@ public class UIGeneratorContextListener {
         String baseUrl = getBaseUrl(environment);
         UI ui = UIFactory.createUI(baseUrl, controllers);
         ui.create(uiGeneratorProperties.isOverride());
+        logger.info("UI was automatically generated");
         if (uiGeneratorProperties.isStartup()) {
             new Thread(ui).start();
+            logger.info("Generated UI is starting");
         }
     }
 
