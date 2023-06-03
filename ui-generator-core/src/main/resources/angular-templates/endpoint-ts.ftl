@@ -28,6 +28,9 @@ export class ${endpoint.getScriptName()}Component implements OnInit, OnDestroy {
     ${prefix}${uiField.getSubmitName()} = this.formGroup.get('${prefix}${uiField.getSubmitName()}') as FormArray;
     </#if>
 </#macro>
+<#assign pathParamPrefix = "path_">
+<#assign queryParamPrefix = "query_">
+<#assign bodyPrefix = "body_">
 
     private mapping: string = '${endpoint.getMapping()}';
     private requestType: string = '${endpoint.getRequestType().name()}';
@@ -38,22 +41,28 @@ export class ${endpoint.getScriptName()}Component implements OnInit, OnDestroy {
     jsonResponseType = false;
 
     formGroup = new FormGroup({
+    <#list endpoint.getPathParams() as pathParam>
+        <@renderFormCotrol uiField=pathParam prefix="${pathParamPrefix}"/>
+    </#list>
     <#list endpoint.getQueryParams() as queryParam>
-        <@renderFormCotrol uiField=queryParam prefix="query_"/>
+        <@renderFormCotrol uiField=queryParam prefix="${queryParamPrefix}"/>
     </#list>
     <#if endpoint.getRequestBody()??>
         <#list endpoint.getRequestBody().getFields() as bodyField>
-            <@renderFormCotrol uiField=bodyField prefix="body_"/>
+            <@renderFormCotrol uiField=bodyField prefix="${bodyPrefix}"/>
         </#list>
     </#if>
     });
 
+<#list endpoint.getPathParams() as pathParam>
+    <@renderFormArray uiField=pathParam prefix="${pathParamPrefix}"/>
+</#list>
 <#list endpoint.getQueryParams() as queryParam>
-    <@renderFormArray uiField=queryParam prefix="query_"/>
+    <@renderFormArray uiField=queryParam prefix="${queryParamPrefix}"/>
 </#list>
 <#if endpoint.getRequestBody()??>
     <#list endpoint.getRequestBody().getFields() as bodyField>
-    <@renderFormArray uiField=bodyField prefix="body_"/>
+    <@renderFormArray uiField=bodyField prefix="${bodyPrefix}"/>
     </#list>
 </#if>
 

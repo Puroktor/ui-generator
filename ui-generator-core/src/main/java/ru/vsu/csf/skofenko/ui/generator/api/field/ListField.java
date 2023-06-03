@@ -1,12 +1,17 @@
 package ru.vsu.csf.skofenko.ui.generator.api.field;
 
-/**
- * Represents field of array or collection in the UI.
- */
-public interface ListField {
+import lombok.Getter;
+
+@Getter
+public class ListField extends UIField  {
 
     /**
-     * Returns description of element of the list.
+     * Description of element of the list.
      */
-    UIField getElement();
+    private final UIField element;
+
+    public ListField(String displayName, String submitName, boolean required, UIField element) {
+        super(displayName, submitName, FieldType.LIST, required);
+        this.element = element;
+    }
 }

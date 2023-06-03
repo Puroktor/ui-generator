@@ -1,16 +1,24 @@
 package ru.vsu.csf.skofenko.ui.generator.api.field;
 
+import lombok.Getter;
+
 import java.util.Map;
 
 /**
  * Represents enum field in the UI.
  */
-public interface EnumField extends UIField {
+@Getter
+public class EnumField extends UIField {
 
     /**
-     * Provides map of all possible enum values.
-     * Where key is name of the value that will be used when submitting,
+     * Map of all possible enum values.
+     * Key is name of the value that will be used when submitting,
      * and value will be used for displaying to users.
      */
-    Map<String, String> getSubmitToDisplayValues();
+    private final Map<String, String> submitToDisplayValues;
+
+    public EnumField(String displayName, String submitName, boolean required, Map<String, String> submitToDisplayValues) {
+        super(displayName, submitName, FieldType.ENUM, required);
+        this.submitToDisplayValues = submitToDisplayValues;
+    }
 }

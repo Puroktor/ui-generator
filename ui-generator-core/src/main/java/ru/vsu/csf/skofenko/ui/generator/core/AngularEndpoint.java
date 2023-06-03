@@ -15,14 +15,16 @@ public class AngularEndpoint implements UIEndpoint {
     private final String scriptName;
     private final String mapping;
     private final UIRequestType requestType;
+    private final List<UIField> pathParams;
     private final List<UIField> queryParams;
     private final UIRequestBody requestBody;
     private final List<UIField> responseBody;
 
-    public AngularEndpoint(String displayName, String mapping, UIRequestType requestType,
+    public AngularEndpoint(String displayName, String mapping, UIRequestType requestType, List<UIField> pathParams,
                            List<UIField> queryParams, UIRequestBody requestBody, List<UIField> responseBody) {
         this.displayName = displayName;
         this.fileName = displayName.replaceAll("\\s", "").toLowerCase();
+        this.pathParams = pathParams;
         this.scriptName = fileName.substring(0, 1).toUpperCase() + fileName.substring(1);
         this.mapping = mapping;
         this.requestType = requestType;

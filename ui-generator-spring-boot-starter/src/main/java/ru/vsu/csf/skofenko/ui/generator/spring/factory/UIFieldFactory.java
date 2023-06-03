@@ -2,11 +2,10 @@ package ru.vsu.csf.skofenko.ui.generator.spring.factory;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.springframework.lang.Nullable;
+import ru.vsu.csf.skofenko.ui.generator.api.field.ClassField;
+import ru.vsu.csf.skofenko.ui.generator.api.field.EnumField;
+import ru.vsu.csf.skofenko.ui.generator.api.field.ListField;
 import ru.vsu.csf.skofenko.ui.generator.api.field.UIField;
-import ru.vsu.csf.skofenko.ui.generator.field.AngularClassField;
-import ru.vsu.csf.skofenko.ui.generator.field.AngularEnumField;
-import ru.vsu.csf.skofenko.ui.generator.field.AngularListField;
-import ru.vsu.csf.skofenko.ui.generator.field.AngularUIField;
 import ru.vsu.csf.skofenko.ui.generator.spring.annotation.DisplayName;
 
 import java.lang.reflect.AnnotatedElement;
@@ -31,25 +30,25 @@ public class UIFieldFactory {
         String displayName = getFieldDisplayName(field, filedClass, submitName);
         boolean isRequired = isParentRequired && (field == null || !field.isAnnotationPresent(Nullable.class));
         if (Number.class.isAssignableFrom(filedClass)) {
-            return new AngularUIField(displayName, submitName, UIField.FieldType.NUMBER, isRequired);
+            return new UIField(displayName, submitName, UIField.FieldType.NUMBER, isRequired);
         } else if (String.class.isAssignableFrom(filedClass)) {
-            return new AngularUIField(displayName, submitName, UIField.FieldType.TEXT, isRequired);
+            return new UIField(displayName, submitName, UIField.FieldType.TEXT, isRequired);
         } else if (filedClass.isEnum()) {
             Map<String, String> submitToDisplayValues = Arrays.stream(filedClass.getFields()).collect(
                     Collectors.toMap(
                             Field::getName, enumField -> getFieldDisplayName(enumField, enumField.getType(), enumField.getName())
                     ));
-            return new AngularEnumField(displayName, submitName, isRequired, submitToDisplayValues);
+            return new EnumField(displayName, submitName, isRequired, submitToDisplayValues);
         } else if (Boolean.class.isAssignableFrom(filedClass)) {
-            return new AngularUIField(displayName, submitName, UIField.FieldType.BOOL, isRequired);
+            return new UIField(displayName, submitName, UIField.FieldType.BOOL, isRequired);
         } else if (filedClass.isArray()) {
             Class<?> elementClass = filedClass.getComponentType();
             UIField element = createUIField(null, elementClass, elementClass.getSimpleName(), parsedClassesSet, isRequired);
-            return new AngularListField(displayName, submitName, isRequired, element);
+            return new ListField(displayName, submitName, isRequired, element);
         } else if (Iterable.class.isAssignableFrom(filedClass)) {
             Type genericType = ((ParameterizedType) filedType).getActualTypeArguments()[0];
             UIField element = createUIField(null, genericType, genericType.getTypeName(), parsedClassesSet, isRequired);
-            return new AngularListField(displayName, submitName, isRequired, element);
+            return new ListField(displayName, submitName, isRequired, element);
         } else {
             List<Field> innerFields = getAllFields(filedClass);
             List<UIField> uiInnerFields = new ArrayList<>();
@@ -59,7 +58,7 @@ public class UIFieldFactory {
                         parsedClassesSet, isRequired);
                 uiInnerFields.add(uiInnerField);
             }
-            return new AngularClassField(displayName, submitName, isRequired, uiInnerFields);
+            return new ClassField(displayName, submitName, isRequired, uiInnerFields);
         }
     }
 

@@ -21,6 +21,11 @@ public interface UIEndpoint extends UIElement {
     UIRequestType getRequestType();
 
     /**
+     * Returns list of UI fields, representing path params.
+     */
+    List<UIField> getPathParams();
+
+    /**
      * Returns list of UI fields, representing query params.
      */
     List<UIField> getQueryParams();

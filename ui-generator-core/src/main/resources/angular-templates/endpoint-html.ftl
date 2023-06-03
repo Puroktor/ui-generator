@@ -70,6 +70,14 @@
                 ${endpoint.getDisplayName()}
             </mat-panel-description>
         </mat-expansion-panel-header>
+        <div class="path-params">
+            <#if endpoint.getQueryParams()?has_content>
+                <h3 class="text-center">Path Params</h3>
+            </#if>
+            <#list endpoint.getPathParams() as pathParam>
+                <@renderField uiField=pathParam prefix="path_"/>
+            </#list>
+        </div>
         <div class="query-params">
             <#if endpoint.getQueryParams()?has_content>
                 <h3 class="text-center">Query Params</h3>
@@ -108,7 +116,7 @@
                 </div>
             </div>
 
-            <#if endpoint.getQueryParams()?has_content>
+            <#if endpoint.getResponseBody()?has_content>
                 <table mat-table [dataSource]="responseTableData" [ngClass]="{'disabled': jsonResponseType}" class="mat-elevation-z4">
                     <#list endpoint.getResponseBody() as responseField>
                         <ng-container matColumnDef="${responseField.getSubmitName()}">

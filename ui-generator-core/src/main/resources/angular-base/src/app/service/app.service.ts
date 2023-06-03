@@ -15,7 +15,9 @@ export class AppService {
         let requestBody: any = {};
         for (const param of Object.entries(values)) {
             let paramName = param[0].split('_');
-            if (paramName[0] == 'query') {
+            if (paramName[0] == 'path') {
+                mapping = mapping.replace(`{${paramName[1]}}`, param[1] as string)
+            } else if (paramName[0] == 'query') {
                 queryParams = queryParams.set(paramName[1], param[1] as string);
             } else if (paramName[0] == 'body') {
                 let element = requestBody

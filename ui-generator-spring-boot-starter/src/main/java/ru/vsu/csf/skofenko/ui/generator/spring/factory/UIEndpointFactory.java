@@ -1,5 +1,6 @@
 package ru.vsu.csf.skofenko.ui.generator.spring.factory;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.vsu.csf.skofenko.ui.generator.api.core.UIEndpoint;
@@ -19,26 +20,29 @@ import java.util.List;
 public class UIEndpointFactory {
 
     public static UIEndpoint createEndpoint(String mapping, UIRequestType requestType, Method method) {
+        List<UIField> pathParams = new ArrayList<>();
         List<UIField> queryParams = new ArrayList<>();
         UIRequestBody requestBody = null;
         DisplayName nameAnnotation = method.getDeclaredAnnotation(DisplayName.class);
         String methodDisplayName = nameAnnotation == null ? method.getName() : nameAnnotation.value();
         for (Parameter parameter : method.getParameters()) {
-            RequestParam paramAnnotation = parameter.getDeclaredAnnotation(RequestParam.class);
+            PathVariable pathParamAnnotation = parameter.getDeclaredAnnotation(PathVariable.class);
+            RequestParam queryParamAnnotation = parameter.getDeclaredAnnotation(RequestParam.class);
             RequestBody requestBodyAnnotation = parameter.getDeclaredAnnotation(RequestBody.class);
-            if (paramAnnotation != null) {
-                UIField uiField = UIFieldFactory.createUIField(parameter, parameter.getParameterizedType(), paramAnnotation.value());
+            if (pathParamAnnotation != null) {
+                UIField uiField = UIFieldFactory.createUIField(parameter, parameter.getParameterizedType(), pathParamAnnotation.value());
+                pathParams.add(uiField);
+            } else if (queryParamAnnotation != null) {
+                UIField uiField = UIFieldFactory.createUIField(parameter, parameter.getParameterizedType(), queryParamAnnotation.value());
                 queryParams.add(uiField);
             } else if (requestBodyAnnotation != null) {
                 List<UIField> fields = getUIFields(parameter.getType());
                 String bodyName = UIFieldFactory.getFieldDisplayName(parameter, parameter.getParameterizedType(), parameter.getName());
                 requestBody = new AngularRequestBody(bodyName, fields);
-            } else {
-                throw new IllegalStateException("Frontend param is neither query or request body parameter " + parameter);
             }
         }
         List<UIField> responseFields = getUIFields(method.getReturnType());
-        return new AngularEndpoint(methodDisplayName, mapping, requestType, queryParams, requestBody, responseFields);
+        return new AngularEndpoint(methodDisplayName, mapping, requestType, pathParams, queryParams, requestBody, responseFields);
     }
 
     private static List<UIField> getUIFields(Class<?> typeClass) {
