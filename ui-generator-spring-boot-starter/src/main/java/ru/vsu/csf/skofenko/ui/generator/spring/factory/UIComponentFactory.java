@@ -31,16 +31,16 @@ public class UIComponentFactory {
             String mapping = null;
             UIRequestType requestType = null;
             if (getMapping != null) {
-                mapping = createMapping(controllerUrl, getMapping.value()[0]);
+                mapping = createMapping(controllerUrl, getMapping.value().length == 0 ? "" : getMapping.value()[0]);
                 requestType = UIRequestType.GET;
             } else if (postMapping != null) {
-                mapping = createMapping(controllerUrl, postMapping.value()[0]);
+                mapping = createMapping(controllerUrl, postMapping.value().length == 0 ? "" : postMapping.value()[0]);
                 requestType = UIRequestType.POST;
             } else if (putMapping != null) {
-                mapping = createMapping(controllerUrl, putMapping.value()[0]);
+                mapping = createMapping(controllerUrl, putMapping.value().length == 0 ? "" : putMapping.value()[0]);
                 requestType = UIRequestType.PUT;
             } else if (deleteMapping != null) {
-                mapping = createMapping(controllerUrl, deleteMapping.value()[0]);
+                mapping = createMapping(controllerUrl, deleteMapping.value().length == 0 ? "" : deleteMapping.value()[0]);
                 requestType = UIRequestType.DELETE;
             }
             UIEndpoint uiEndpoint = UIEndpointFactory.createEndpoint(mapping, requestType, method);

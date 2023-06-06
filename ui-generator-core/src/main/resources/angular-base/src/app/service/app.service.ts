@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams, HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpParams, HttpResponse, HttpHeaders} from "@angular/common/http";
 import {Observable} from 'rxjs';
 
 @Injectable({
@@ -31,8 +31,13 @@ export class AppService {
                 element[innerFieldName] = param[1];
             }
         }
+
+        const headers = new HttpHeaders()
+            .set('Accept', 'application/json')
+            .set('Content-Type', 'application/json')
+
         return this.http.request<HttpResponse<any>>(
-            requestType, mapping, {params: queryParams, body: JSON.stringify(requestBody), observe: 'response'}
+            requestType, mapping, {headers: headers, params: queryParams, body: JSON.stringify(requestBody), observe: 'response'}
         );
     }
 }
