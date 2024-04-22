@@ -1,4 +1,4 @@
-package ru.vsu.csf.skofenko.ui.generator.api.core;
+package ru.vsu.csf.skofenko.ui.generator.api;
 
 import ru.vsu.csf.skofenko.ui.generator.api.field.UIField;
 

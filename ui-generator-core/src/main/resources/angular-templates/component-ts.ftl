@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="component" type="ru.vsu.csf.skofenko.ui.generator.api.core.UIComponent" -->
+<#-- @ftlvariable name="component" type="ru.vsu.csf.skofenko.ui.generator.api.UIComponent" -->
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
 @Component({

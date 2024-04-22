@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="components" type="java.util.List<ru.vsu.csf.skofenko.ui.generator.api.core.UIComponent>" -->
+<#-- @ftlvariable name="components" type="java.util.List<ru.vsu.csf.skofenko.ui.generator.api.UIComponent>" -->
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {InfoComponent} from './info/info.component';

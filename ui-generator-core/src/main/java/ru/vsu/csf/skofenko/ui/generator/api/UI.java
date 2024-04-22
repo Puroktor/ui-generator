@@ -1,8 +1,8 @@
-package ru.vsu.csf.skofenko.ui.generator.api.core;
+package ru.vsu.csf.skofenko.ui.generator.api;
 
 /**
  * Main user interface class.
- * Provides ability to create and strup UI based on configuration.
+ * Provides ability to create and startup UI based on configuration.
  */
 public interface UI extends Runnable {
 

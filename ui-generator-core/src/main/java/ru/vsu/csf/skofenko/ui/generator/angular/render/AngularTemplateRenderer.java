@@ -1,4 +1,4 @@
-package ru.vsu.csf.skofenko.ui.generator.render;
+package ru.vsu.csf.skofenko.ui.generator.angular.render;
 
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;

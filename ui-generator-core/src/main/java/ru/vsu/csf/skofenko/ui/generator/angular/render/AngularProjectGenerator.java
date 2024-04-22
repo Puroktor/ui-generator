@@ -1,10 +1,10 @@
-package ru.vsu.csf.skofenko.ui.generator.render;
+package ru.vsu.csf.skofenko.ui.generator.angular.render;
 
 import freemarker.template.TemplateException;
 import lombok.experimental.UtilityClass;
-import ru.vsu.csf.skofenko.ui.generator.api.core.UIComponent;
-import ru.vsu.csf.skofenko.ui.generator.api.core.UIEndpoint;
-import ru.vsu.csf.skofenko.ui.generator.core.AngularComponent;
+import ru.vsu.csf.skofenko.ui.generator.angular.core.AngularComponent;
+import ru.vsu.csf.skofenko.ui.generator.api.UIComponent;
+import ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint;
 import ru.vsu.csf.skofenko.ui.generator.util.FileUtils;
 
 import java.io.File;
@@ -63,9 +63,13 @@ public class AngularProjectGenerator {
         AngularTemplateRenderer.renderTemplate(routingModule,
                 AngularTemplateRenderer.TemplateFile.ROUTING_MODULE, Map.of("components", components));
 
+        AngularComponent headerComponent = new AngularComponent();
+        headerComponent.setDisplayName("header");
+        headerComponent.createNames();
+
         File headerTS = new File(projectDir, "src/app/header/header.component.ts");
         AngularTemplateRenderer.renderTemplate(headerTS,
-                AngularTemplateRenderer.TemplateFile.COMPONENT_TS, Map.of("component", new AngularComponent("header")));
+                AngularTemplateRenderer.TemplateFile.COMPONENT_TS, Map.of("component", headerComponent));
 
         File headerHTML = new File(projectDir, "src/app/header/header.component.html");
         AngularTemplateRenderer.renderTemplate(headerHTML,

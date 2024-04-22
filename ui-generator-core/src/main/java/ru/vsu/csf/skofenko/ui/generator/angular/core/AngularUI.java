@@ -1,29 +1,42 @@
-package ru.vsu.csf.skofenko.ui.generator.core;
+package ru.vsu.csf.skofenko.ui.generator.angular.core;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import freemarker.template.TemplateException;
-import ru.vsu.csf.skofenko.ui.generator.api.core.UI;
-import ru.vsu.csf.skofenko.ui.generator.api.core.UIComponent;
-import ru.vsu.csf.skofenko.ui.generator.api.core.UIEndpoint;
-import ru.vsu.csf.skofenko.ui.generator.render.AngularProjectGenerator;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.vsu.csf.skofenko.ui.generator.angular.render.AngularProjectGenerator;
+import ru.vsu.csf.skofenko.ui.generator.api.UI;
+import ru.vsu.csf.skofenko.ui.generator.api.UIComponent;
+import ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 
+@Data
+@NoArgsConstructor
 public class AngularUI implements UI {
 
     public static final String FRONTEND_DIR_NAME = "frontend";
     public static final String FRONTEND_LOGS_FILE = "frontend-log.txt";
-    private final Collection<UIComponent> components;
-    private final Path resourcePath;
-    private final String baseUrl;
 
-    public AngularUI(String baseUrl,Path resourcePath, Collection<UIComponent> components) {
+    @JsonProperty
+    @JsonDeserialize(contentAs = AngularComponent.class)
+    private Collection<UIComponent> components;
+    @JsonProperty
+    private String resourcePath;
+    @JsonProperty
+    private String baseUrl;
+
+    private Path resources;
+
+    public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
-        this.components = components;
-        this.baseUrl = baseUrl;
+        resources = Paths.get(resourcePath);
     }
 
     @Override
@@ -32,16 +45,18 @@ public class AngularUI implements UI {
             return false;
         }
         try {
-            File projectDir = resourcePath.resolve(FRONTEND_DIR_NAME).toFile();
+            File projectDir = resources.resolve(FRONTEND_DIR_NAME).toFile();
             if (projectDir.exists() && !overrideUI) {
                 return true;
             }
             projectDir.mkdir();
             AngularProjectGenerator.createBaseProject(projectDir);
             AngularProjectGenerator.createProxyConfig(getBaseUrl(), projectDir);
+            createElementNames(components);
             for (UIComponent component : components) {
                 File componentDir = AngularProjectGenerator.createComponent(component, projectDir);
                 for (UIEndpoint endpoint : component.getEndpoints()) {
+                    endpoint.createNames();
                     AngularProjectGenerator.createEndpoint(endpoint, component, componentDir);
                 }
             }
@@ -52,11 +67,18 @@ public class AngularUI implements UI {
         }
     }
 
+    private void createElementNames(Collection<UIComponent> components) {
+        for (UIComponent component : components) {
+            component.createNames();
+            component.getEndpoints().forEach(UIEndpoint::createNames);
+        }
+    }
+
     @Override
     public void run() {
         try {
-            File directory = resourcePath.resolve(FRONTEND_DIR_NAME).toFile();
-            File logs = resourcePath.resolve(FRONTEND_LOGS_FILE).toFile();
+            File directory = resources.resolve(FRONTEND_DIR_NAME).toFile();
+            File logs = resources.resolve(FRONTEND_LOGS_FILE).toFile();
             new FileWriter(logs).close();
             new ProcessBuilder("npm.cmd", "install").directory(directory).start().waitFor();
             Process process = new ProcessBuilder("ng.cmd", "serve")

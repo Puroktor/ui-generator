@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="endpoint" type="ru.vsu.csf.skofenko.ui.generator.api.core.UIEndpoint" -->
+<#-- @ftlvariable name="endpoint" type="ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint" -->
 <#-- @ftlvariable name="componentName" type="java.lang.String" -->
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup, FormControl, FormArray, Validators} from '@angular/forms';

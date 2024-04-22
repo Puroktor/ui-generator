@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="component" type="ru.vsu.csf.skofenko.ui.generator.api.core.UIComponent" -->
+<#-- @ftlvariable name="component" type="ru.vsu.csf.skofenko.ui.generator.api.UIComponent" -->
 
 <mat-accordion class="generated-forms-container" multi>
 <#list component.endpoints as endpoint>

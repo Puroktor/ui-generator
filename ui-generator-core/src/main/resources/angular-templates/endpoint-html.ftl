@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="endpoint" type="ru.vsu.csf.skofenko.ui.generator.api.core.UIEndpoint" -->
+<#-- @ftlvariable name="endpoint" type="ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint" -->
 
 <#macro renderField uiField prefix>
     <#if uiField.getFieldType().name() == "TEXT" || uiField.getFieldType().name() == "NUMBER" ||  uiField.getFieldType().name() == "ENUM">
