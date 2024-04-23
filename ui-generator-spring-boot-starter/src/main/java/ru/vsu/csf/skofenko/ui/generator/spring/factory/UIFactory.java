@@ -14,7 +14,6 @@ public class UIFactory {
                 .toList();
         AngularUI angularUI = new AngularUI();
         angularUI.setBaseUrl(baseUrl);
-        angularUI.setResourcePath("");
         angularUI.setComponents(uiComponents);
         return angularUI;
     }

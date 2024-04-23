@@ -11,12 +11,14 @@ public class CmdParser {
         Option engineOption = Option.builder("e")
                 .longOpt("engine")
                 .desc("Frontend engine that will be used for project generation, defaults to Angular")
+                .hasArg()
                 .build();
         options.addOption(engineOption);
 
         Option pathOption = Option.builder("p")
                 .longOpt("path")
                 .desc("Path to project configuration file")
+                .hasArg()
                 .required()
                 .build();
         options.addOption(pathOption);
@@ -44,8 +46,8 @@ public class CmdParser {
                 engine = UIGenerationEngine.ANGULAR;
             }
             String path = cmd.getOptionValue(pathOption);
-            boolean override = cmd.getParsedOptionValue(pathOption);
-            boolean startup = cmd.getParsedOptionValue(startupOption);
+            boolean override = cmd.hasOption(overrideOption);
+            boolean startup = cmd.hasOption(startupOption);
             return new CmdArguments(engine, path, override, startup);
         } catch (ParseException e) {
             HelpFormatter formatter = new HelpFormatter();

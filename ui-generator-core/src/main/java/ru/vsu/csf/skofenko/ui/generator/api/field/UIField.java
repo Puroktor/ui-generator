@@ -10,9 +10,9 @@ public interface UIField {
     String getDisplayName();
 
     /**
-     * Name that will be used for form submitting
+     * Name that will be used in code / for form submitting
      */
-    String getSubmitName();
+    String getCodeName();
 
     /**
      * Type of this field.

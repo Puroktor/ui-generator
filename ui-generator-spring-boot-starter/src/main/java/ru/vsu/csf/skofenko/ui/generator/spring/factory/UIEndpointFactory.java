@@ -42,8 +42,7 @@ public class UIEndpointFactory {
             }
         }
         List<UIField> responseBody = getUIFields(method.getReturnType());
-        return AngularEndpoint.builder()
-                .displayName(methodDisplayName)
+        AngularEndpoint endpoint = AngularEndpoint.builder()
                 .mapping(mapping)
                 .requestType(requestType)
                 .requestBody(requestBody)
@@ -51,6 +50,8 @@ public class UIEndpointFactory {
                 .queryParams(queryParams)
                 .responseBody(responseBody)
                 .build();
+        endpoint.setDisplayName(methodDisplayName);
+        return endpoint;
     }
 
     private static List<UIField> getUIFields(Class<?> typeClass) {

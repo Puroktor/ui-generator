@@ -18,6 +18,9 @@ import ru.vsu.csf.skofenko.ui.generator.api.field.UIField;
         visible = true
 )
 @JsonSubTypes({
+        @JsonSubTypes.Type(value=AngularField.class, name="NUMBER"),
+        @JsonSubTypes.Type(value=AngularField.class, name="TEXT"),
+        @JsonSubTypes.Type(value=AngularField.class, name="BOOL"),
         @JsonSubTypes.Type(value=AngularClassField.class, name="CLASS"),
         @JsonSubTypes.Type(value=AngularEnumField.class, name="ENUM"),
         @JsonSubTypes.Type(value=AngularListField.class, name="LIST"),
@@ -26,7 +29,7 @@ public class AngularField implements UIField {
     @JsonProperty
     private String displayName;
     @JsonProperty
-    private String submitName;
+    private String codeName;
     @JsonProperty
     private FieldType fieldType;
     @JsonProperty

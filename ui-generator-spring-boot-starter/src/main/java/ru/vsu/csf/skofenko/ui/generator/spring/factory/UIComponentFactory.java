@@ -45,7 +45,7 @@ public class UIComponentFactory {
             UIEndpoint uiEndpoint = UIEndpointFactory.createEndpoint(mapping, requestType, method);
             endpoints.add(uiEndpoint);
         }
-        uiComponent.setUiEndpoints(endpoints);
+        uiComponent.setEndpoints(endpoints);
         return uiComponent;
     }
 

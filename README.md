@@ -25,5 +25,16 @@
   ```
   Демонстрационный проект можно найти [здесь](https://github.com/Puroktor/spring-ui-generation-demo).
 
-* `ui-config-generator-asp-net`
+* `ui-config-generator-asp-net`  - парсер UI конфигурации ASP NET Core приложений. 
+Для его использования необходимо подключить к проекту зависимость в виде .dll библиотеки.
+Затем досточно лишь прописать в `Program.cs`
+  ```
+  UIConfigGenerator.UIConfigGenerator.ParseAssembley(assembley, url);
+  ```
+  И файл конфигурации будет создан (можно также указать директорию). <br/>
+  Для построения приложения по нему необходимо использовать CLI tool:
+  ```
+  java -jar ui-cli.jar -o -p ui-config.json
+  ```
+  Демонстрационный проект можно найти [здесь](https://github.com/Puroktor/asp-net-ui-generation-demo).
 * `ui-config-generator-flask`

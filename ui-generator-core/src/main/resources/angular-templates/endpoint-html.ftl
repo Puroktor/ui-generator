@@ -5,24 +5,24 @@
         <mat-form-field class="long-field">
             <mat-label>${uiField.getDisplayName()}</mat-label>
             <#if uiField.getFieldType().name() == "ENUM">
-            <mat-select formControlName="${prefix}${uiField.getSubmitName()}">
+            <mat-select formControlName="${prefix}${uiField.getCodeName()}">
                 <#list uiField.getSubmitToDisplayValues() as submitName, displayName>
                     <mat-option value="${submitName}">${displayName}</mat-option>
                 </#list>
             </mat-select>
             <#else>
-            <input matInput formControlName="${prefix}${uiField.getSubmitName()}" <#if uiField.getFieldType().name() == "NUMBER">type="number"</#if>>
+            <input matInput formControlName="${prefix}${uiField.getCodeName()}" <#if uiField.getFieldType().name() == "NUMBER">type="number"</#if>>
             </#if>
-            <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getSubmitName()}'].errors?.['required']">${uiField.getDisplayName()} is required</mat-error>
+            <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getCodeName()}'].errors?.['required']">${uiField.getDisplayName()} is required</mat-error>
         </mat-form-field>
     <#elseif uiField.getFieldType().name() == "BOOL">
-        <mat-checkbox class="checkbox" formControlName="${prefix}${uiField.getSubmitName()}">${uiField.getDisplayName()}</mat-checkbox>
+        <mat-checkbox class="checkbox" formControlName="${prefix}${uiField.getCodeName()}">${uiField.getDisplayName()}</mat-checkbox>
     <#elseif uiField.getFieldType().name() == "LIST">
         <div class="flex-container">
             <p class="label">${uiField.getDisplayName()}:</p>
-            <div class="array-container" formArrayName="${prefix}${uiField.getSubmitName()}">
+            <div class="array-container" formArrayName="${prefix}${uiField.getCodeName()}">
                 <div class="list-form-container"
-                     *ngFor="let item of ${prefix}${uiField.getSubmitName()}.controls; index as i">
+                     *ngFor="let item of ${prefix}${uiField.getCodeName()}.controls; index as i">
                     <mat-form-field class="list-form-field">
                         <mat-label>Element {{i+1}}</mat-label>
                         <#if uiField.getElement().getFieldType().name() == "ENUM">
@@ -38,11 +38,11 @@
                             Element {{i+1}} is required
                         </mat-error>
                     </mat-form-field>
-                    <button mat-mini-fab class="remove-element-btn" color="accent" type="button" (click)="removeFormArrayItem(${prefix}${uiField.getSubmitName()}, i)">
+                    <button mat-mini-fab class="remove-element-btn" color="accent" type="button" (click)="removeFormArrayItem(${prefix}${uiField.getCodeName()}, i)">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>
-                <button mat-mini-fab color="primary" class="add-element-btn" type="button" (click)="addFormArrayItem(${prefix}${uiField.getSubmitName()}, ${uiField.isRequired()?string('true', 'false')})">
+                <button mat-mini-fab color="primary" class="add-element-btn" type="button" (click)="addFormArrayItem(${prefix}${uiField.getCodeName()}, ${uiField.isRequired()?string('true', 'false')})">
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
@@ -52,7 +52,7 @@
             <p class="label">${uiField.getDisplayName()}:</p>
             <div class="class-container">
                 <#list uiField.getInnerFields() as innerField>
-                    <@renderField uiField=innerField prefix="${prefix}${uiField.getSubmitName()}_"/>
+                    <@renderField uiField=innerField prefix="${prefix}${uiField.getCodeName()}_"/>
                 </#list>
             </div>
         </div>
@@ -119,9 +119,9 @@
             <#if endpoint.getResponseBody()?has_content>
                 <table mat-table [dataSource]="responseTableData" [ngClass]="{'disabled': jsonResponseType}" class="mat-elevation-z4">
                     <#list endpoint.getResponseBody() as responseField>
-                        <ng-container matColumnDef="${responseField.getSubmitName()}">
+                        <ng-container matColumnDef="${responseField.getCodeName()}">
                             <th mat-header-cell *matHeaderCellDef>${responseField.getDisplayName()}</th>
-                            <td mat-cell *matCellDef="let element">{{element.${responseField.getSubmitName()}}}</td>
+                            <td mat-cell *matCellDef="let element">{{element.${responseField.getCodeName()}}}</td>
                         </ng-container>
                     </#list>
                     <tr mat-header-row *matHeaderRowDef="displayedResponseColumns"></tr>

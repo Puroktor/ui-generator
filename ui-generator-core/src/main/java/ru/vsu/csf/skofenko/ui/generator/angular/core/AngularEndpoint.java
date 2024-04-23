@@ -2,25 +2,22 @@ package ru.vsu.csf.skofenko.ui.generator.angular.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.vsu.csf.skofenko.ui.generator.angular.field.AngularField;
 import ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint;
 import ru.vsu.csf.skofenko.ui.generator.api.UIRequestBody;
 import ru.vsu.csf.skofenko.ui.generator.api.UIRequestType;
 import ru.vsu.csf.skofenko.ui.generator.api.field.UIField;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Builder
-public class AngularEndpoint implements UIEndpoint {
-    @JsonProperty
-    private String displayName;
+public class AngularEndpoint extends AngularElement implements UIEndpoint {
     @JsonProperty
     private String mapping;
     @JsonProperty
@@ -30,21 +27,11 @@ public class AngularEndpoint implements UIEndpoint {
     private UIRequestBody requestBody;
     @JsonProperty
     @JsonDeserialize(contentAs = AngularField.class)
-    private List<UIField> pathParams;
+    private List<UIField> pathParams = new ArrayList<>();
     @JsonProperty
     @JsonDeserialize(contentAs = AngularField.class)
-    private List<UIField> queryParams;
+    private List<UIField> queryParams = new ArrayList<>();
     @JsonProperty
     @JsonDeserialize(contentAs = AngularField.class)
-    private List<UIField> responseBody;
-
-    /* Internal values*/
-    private String fileName;
-    private String scriptName;
-
-    @Override
-    public void createNames() {
-        this.fileName = displayName.replaceAll("\\s", "").toLowerCase();
-        this.scriptName = fileName.substring(0, 1).toUpperCase() + fileName.substring(1);
-    }
+    private List<UIField> responseBody = new ArrayList<>();
 }

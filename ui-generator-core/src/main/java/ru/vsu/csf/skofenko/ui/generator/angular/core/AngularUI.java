@@ -23,21 +23,13 @@ public class AngularUI implements UI {
 
     public static final String FRONTEND_DIR_NAME = "frontend";
     public static final String FRONTEND_LOGS_FILE = "frontend-log.txt";
+    public static final Path RESOURCES_PATH = Paths.get("");
 
     @JsonProperty
     @JsonDeserialize(contentAs = AngularComponent.class)
     private Collection<UIComponent> components;
     @JsonProperty
-    private String resourcePath;
-    @JsonProperty
     private String baseUrl;
-
-    private Path resources;
-
-    public void setResourcePath(String resourcePath) {
-        this.resourcePath = resourcePath;
-        resources = Paths.get(resourcePath);
-    }
 
     @Override
     public boolean create(boolean overrideUI) {
@@ -45,7 +37,7 @@ public class AngularUI implements UI {
             return false;
         }
         try {
-            File projectDir = resources.resolve(FRONTEND_DIR_NAME).toFile();
+            File projectDir = RESOURCES_PATH.resolve(FRONTEND_DIR_NAME).toFile();
             if (projectDir.exists() && !overrideUI) {
                 return true;
             }
@@ -56,7 +48,6 @@ public class AngularUI implements UI {
             for (UIComponent component : components) {
                 File componentDir = AngularProjectGenerator.createComponent(component, projectDir);
                 for (UIEndpoint endpoint : component.getEndpoints()) {
-                    endpoint.createNames();
                     AngularProjectGenerator.createEndpoint(endpoint, component, componentDir);
                 }
             }
@@ -77,8 +68,8 @@ public class AngularUI implements UI {
     @Override
     public void run() {
         try {
-            File directory = resources.resolve(FRONTEND_DIR_NAME).toFile();
-            File logs = resources.resolve(FRONTEND_LOGS_FILE).toFile();
+            File directory = RESOURCES_PATH.resolve(FRONTEND_DIR_NAME).toFile();
+            File logs = RESOURCES_PATH.resolve(FRONTEND_LOGS_FILE).toFile();
             new FileWriter(logs).close();
             new ProcessBuilder("npm.cmd", "install").directory(directory).start().waitFor();
             Process process = new ProcessBuilder("ng.cmd", "serve")
