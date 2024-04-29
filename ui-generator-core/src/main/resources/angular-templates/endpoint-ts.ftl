@@ -28,9 +28,9 @@ export class ${endpoint.getScriptName()}Component implements OnInit, OnDestroy {
     ${prefix}${uiField.getCodeName()} = this.formGroup.get('${prefix}${uiField.getCodeName()}') as FormArray;
     </#if>
 </#macro>
-<#assign pathParamPrefix = "path_">
-<#assign queryParamPrefix = "query_">
-<#assign bodyPrefix = "body_">
+<#assign pathParamPrefix = "path$">
+<#assign queryParamPrefix = "query$">
+<#assign bodyPrefix = "body$">
 
     private mapping: string = '${endpoint.getMapping()}';
     private requestType: string = '${endpoint.getRequestType().name()}';

@@ -37,4 +37,15 @@
   java -jar ui-cli.jar -o -p ui-config.json
   ```
   Демонстрационный проект можно найти [здесь](https://github.com/Puroktor/asp-net-ui-generation-demo).
-* `ui-config-generator-flask`
+* `ui-config-generator-flask` парсер UI конфигурации Flask приложений. 
+  Выполнен в виде wheel пакета для PIP. Для создания JSON опсиания для Blueprint, 
+  необходимо его предварительно зарегистрировать: 
+  ```
+  generator = FlaskUIGenerator()
+  generator.register_blueprint(blueprint)
+  ...
+  generator.write_config(base_url)
+  ```
+  К сожалению в отличие от двух предыдущих парсеров, для Flask прийдется с помощью декораторов задавать request/response 
+  body и параметры запроса, т.к. язык динамически типизированный. 
+  Демонстрационный проект можно найти [здесь](https://github.com/Puroktor/flask-ui-generation-demo)

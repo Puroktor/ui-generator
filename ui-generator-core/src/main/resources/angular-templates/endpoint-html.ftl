@@ -75,7 +75,7 @@
                 <h3 class="text-center">Path Params</h3>
             </#if>
             <#list endpoint.getPathParams() as pathParam>
-                <@renderField uiField=pathParam prefix="path_"/>
+                <@renderField uiField=pathParam prefix="path$"/>
             </#list>
         </div>
         <div class="query-params">
@@ -83,14 +83,14 @@
                 <h3 class="text-center">Query Params</h3>
             </#if>
             <#list endpoint.getQueryParams() as queryParam>
-                <@renderField uiField=queryParam prefix="query_"/>
+                <@renderField uiField=queryParam prefix="query$"/>
             </#list>
         </div>
         <div class="request-body">
             <#if endpoint.getRequestBody()??>
                 <h3 class="text-center">Request Body - ${endpoint.getRequestBody().getEntityName()}</h3>
                 <#list endpoint.getRequestBody().getFields() as requestField>
-                   <@renderField uiField=requestField prefix="body_"/>
+                   <@renderField uiField=requestField prefix="body$"/>
                 </#list>
             </#if>
         </div>
