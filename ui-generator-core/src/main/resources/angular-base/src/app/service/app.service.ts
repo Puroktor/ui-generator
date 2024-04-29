@@ -14,7 +14,7 @@ export class AppService {
         let queryParams = new HttpParams();
         let requestBody: any = {};
         for (const param of Object.entries(values)) {
-            let paramName = param[0].split('_');
+            let paramName = param[0].split('$');
             if (paramName[0] == 'path') {
                 mapping = mapping.replace(`{${paramName[1]}}`, param[1] as string)
             } else if (paramName[0] == 'query') {

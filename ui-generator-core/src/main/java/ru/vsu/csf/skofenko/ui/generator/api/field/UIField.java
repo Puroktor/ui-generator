@@ -1,36 +1,34 @@
 package ru.vsu.csf.skofenko.ui.generator.api.field;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 /**
  * Represents field of any entity that will be used in UI.
  */
-@RequiredArgsConstructor
-@Getter
-public class UIField {
+public interface UIField {
     /**
      * Name that will be shown for the users
      */
-    private final String displayName;
+    String getDisplayName();
+
     /**
-     * Name that will be used for form submitting
+     * Name that will be used in code / for form submitting
      */
-    private final String submitName;
+    String getCodeName();
+
     /**
      * Type of this field.
      * It is used in template renderer.
      */
-    private final FieldType fieldType;
+    FieldType getFieldType();
+
     /**
      * Specifies whether this field is required
      */
-    private final boolean required;
+    boolean isRequired();
 
     /**
-     *  Enumerates all supported UI field types
+     * Enumerates all supported UI field types
      */
-    public enum FieldType {
+    enum FieldType {
         TEXT,
         NUMBER,
         BOOL,

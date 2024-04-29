@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIConfigGenerator", "UIConfigGenerator.csproj", "{9ADD1629-3094-4787-84C8-A017C69440E0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9ADD1629-3094-4787-84C8-A017C69440E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ADD1629-3094-4787-84C8-A017C69440E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ADD1629-3094-4787-84C8-A017C69440E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ADD1629-3094-4787-84C8-A017C69440E0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4A84D40E-CBB2-4B22-90B9-0FA96CC88451}
+	EndGlobalSection
+EndGlobal

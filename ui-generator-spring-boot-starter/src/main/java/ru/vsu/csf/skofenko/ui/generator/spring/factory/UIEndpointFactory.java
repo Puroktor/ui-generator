@@ -3,12 +3,12 @@ package ru.vsu.csf.skofenko.ui.generator.spring.factory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.vsu.csf.skofenko.ui.generator.api.core.UIEndpoint;
-import ru.vsu.csf.skofenko.ui.generator.api.core.UIRequestBody;
-import ru.vsu.csf.skofenko.ui.generator.api.core.UIRequestType;
+import ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint;
+import ru.vsu.csf.skofenko.ui.generator.api.UIRequestBody;
+import ru.vsu.csf.skofenko.ui.generator.api.UIRequestType;
+import ru.vsu.csf.skofenko.ui.generator.angular.core.AngularEndpoint;
+import ru.vsu.csf.skofenko.ui.generator.angular.core.AngularRequestBody;
 import ru.vsu.csf.skofenko.ui.generator.api.field.UIField;
-import ru.vsu.csf.skofenko.ui.generator.core.AngularEndpoint;
-import ru.vsu.csf.skofenko.ui.generator.core.AngularRequestBody;
 import ru.vsu.csf.skofenko.ui.generator.spring.annotation.DisplayName;
 
 import java.lang.reflect.Method;
@@ -41,8 +41,17 @@ public class UIEndpointFactory {
                 requestBody = new AngularRequestBody(bodyName, fields);
             }
         }
-        List<UIField> responseFields = getUIFields(method.getReturnType());
-        return new AngularEndpoint(methodDisplayName, mapping, requestType, pathParams, queryParams, requestBody, responseFields);
+        List<UIField> responseBody = getUIFields(method.getReturnType());
+        AngularEndpoint endpoint = AngularEndpoint.builder()
+                .mapping(mapping)
+                .requestType(requestType)
+                .requestBody(requestBody)
+                .pathParams(pathParams)
+                .queryParams(queryParams)
+                .responseBody(responseBody)
+                .build();
+        endpoint.setDisplayName(methodDisplayName);
+        return endpoint;
     }
 
     private static List<UIField> getUIFields(Class<?> typeClass) {

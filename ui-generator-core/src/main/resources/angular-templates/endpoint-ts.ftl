@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="endpoint" type="ru.vsu.csf.skofenko.ui.generator.api.core.UIEndpoint" -->
+<#-- @ftlvariable name="endpoint" type="ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint" -->
 <#-- @ftlvariable name="componentName" type="java.lang.String" -->
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup, FormControl, FormArray, Validators} from '@angular/forms';
@@ -15,28 +15,28 @@ export class ${endpoint.getScriptName()}Component implements OnInit, OnDestroy {
 <#macro renderFormCotrol uiField prefix>
     <#if uiField.getFieldType().name() == "CLASS">
         <#list uiField.getInnerFields() as innerField>
-            <@renderFormCotrol uiField=innerField prefix="${prefix}${uiField.getSubmitName()}_"/>
+            <@renderFormCotrol uiField=innerField prefix="${prefix}${uiField.getCodeName()}_"/>
         </#list>
     <#elseif uiField.getFieldType().name() == "LIST">
-        "${prefix}${uiField.getSubmitName()}" : new FormArray([]),
+        "${prefix}${uiField.getCodeName()}" : new FormArray([]),
     <#else>
-        "${prefix}${uiField.getSubmitName()}" : new FormControl(<#if uiField.getFieldType().name() == "BOOL">false<#else>null</#if><#if uiField.isRequired()>,Validators.required</#if>),
+        "${prefix}${uiField.getCodeName()}" : new FormControl(<#if uiField.getFieldType().name() == "BOOL">false<#else>null</#if><#if uiField.isRequired()>,Validators.required</#if>),
     </#if>
 </#macro>
 <#macro renderFormArray uiField prefix>
     <#if uiField.getFieldType().name() == "LIST">
-    ${prefix}${uiField.getSubmitName()} = this.formGroup.get('${prefix}${uiField.getSubmitName()}') as FormArray;
+    ${prefix}${uiField.getCodeName()} = this.formGroup.get('${prefix}${uiField.getCodeName()}') as FormArray;
     </#if>
 </#macro>
-<#assign pathParamPrefix = "path_">
-<#assign queryParamPrefix = "query_">
-<#assign bodyPrefix = "body_">
+<#assign pathParamPrefix = "path$">
+<#assign queryParamPrefix = "query$">
+<#assign bodyPrefix = "body$">
 
     private mapping: string = '${endpoint.getMapping()}';
     private requestType: string = '${endpoint.getRequestType().name()}';
     response: any|null = null;
 
-    displayedResponseColumns: string[] = [<#list endpoint.getResponseBody() as responseField>'${responseField.getSubmitName()}',</#list>];
+    displayedResponseColumns: string[] = [<#list endpoint.getResponseBody() as responseField>'${responseField.getCodeName()}',</#list>];
     responseTableData: any|null = null;
     jsonResponseType = false;
 

@@ -6,7 +6,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import ru.vsu.csf.skofenko.ui.generator.api.core.UI;
+import ru.vsu.csf.skofenko.ui.generator.api.UI;
 import ru.vsu.csf.skofenko.ui.generator.spring.annotation.AutoGenerateUI;
 import ru.vsu.csf.skofenko.ui.generator.spring.config.UIGeneratorProperties;
 import ru.vsu.csf.skofenko.ui.generator.spring.factory.UIFactory;
@@ -36,6 +36,7 @@ public class UIGeneratorContextListener {
         }
     }
 
+    // TODO: Add SSL support
     private String getBaseUrl(Environment environment) {
         String serverPort = environment.getProperty("local.server.port");
         return "http://localhost:%s".formatted(serverPort);

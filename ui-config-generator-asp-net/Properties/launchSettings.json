@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "UIConfigGenerator": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:61423;http://localhost:61424",
+      "nativeDebugging": true
+    }
+  }
+}

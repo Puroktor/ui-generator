@@ -1,10 +1,9 @@
 package ru.vsu.csf.skofenko.ui.generator.spring.factory;
 
-import ru.vsu.csf.skofenko.ui.generator.api.core.UI;
-import ru.vsu.csf.skofenko.ui.generator.api.core.UIComponent;
-import ru.vsu.csf.skofenko.ui.generator.core.AngularUI;
+import ru.vsu.csf.skofenko.ui.generator.angular.core.AngularUI;
+import ru.vsu.csf.skofenko.ui.generator.api.UI;
+import ru.vsu.csf.skofenko.ui.generator.api.UIComponent;
 
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,6 +12,9 @@ public class UIFactory {
         List<UIComponent> uiComponents = controllers.stream()
                 .map(obj -> UIComponentFactory.createUIComponent(obj.getClass()))
                 .toList();
-        return new AngularUI(baseUrl, Paths.get(""), uiComponents);
+        AngularUI angularUI = new AngularUI();
+        angularUI.setBaseUrl(baseUrl);
+        angularUI.setComponents(uiComponents);
+        return angularUI;
     }
 }

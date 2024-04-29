@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="components" type="java.util.List<ru.vsu.csf.skofenko.ui.generator.api.core.UIComponent>" -->
+<#-- @ftlvariable name="components" type="java.util.List<ru.vsu.csf.skofenko.ui.generator.api.UIComponent>" -->
 <mat-toolbar color="primary">
     <#list components as component>
     <a mat-button routerLink="/${component.getFileName()}"
