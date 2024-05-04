@@ -5,6 +5,8 @@ namespace UIConfigGenerator.Config
     [JsonDerivedType(typeof(UIClassField))]
     [JsonDerivedType(typeof(UIListField))]
     [JsonDerivedType(typeof(UIEnumField))]
+    [JsonDerivedType(typeof(UITextField))]
+    [JsonDerivedType(typeof(UINumberField))]
     internal class UIField
     {
         public string? DisplayName { get; set; }

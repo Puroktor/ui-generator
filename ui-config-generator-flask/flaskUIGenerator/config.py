@@ -29,6 +29,19 @@ class UIField:
 
 
 @dataclass
+class UINumberField(UIField):
+    min: Optional[int]
+    max: Optional[int]
+
+
+@dataclass
+class UITextField(UIField):
+    pattern: Optional[str]
+    min_length: Optional[int]
+    max_length: Optional[int]
+
+
+@dataclass
 class UIEnumField(UIField):
     submit_to_display_values: Dict[str, str]
 
@@ -64,6 +77,7 @@ class UIEndpoint:
 class UIComponent:
     name: str
     endpoints: list[UIEndpoint]
+
 
 @dataclass
 class UIConfig:

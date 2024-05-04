@@ -13,7 +13,38 @@
             <#else>
             <input matInput formControlName="${prefix}${uiField.getCodeName()}" <#if uiField.getFieldType().name() == "NUMBER">type="number"</#if>>
             </#if>
-            <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getCodeName()}'].errors?.['required']">${uiField.getDisplayName()} is required</mat-error>
+            <#if uiField.getFieldType().name() == "NUMBER">
+                 <#if uiField.getMin()??>
+                     <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getCodeName()}'].errors?.['min']">
+                         ${uiField.getDisplayName()} must be greater or equal to ${uiField.getMin()?c}
+                     </mat-error>
+                 </#if>
+                <#if uiField.getMax()??>
+                    <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getCodeName()}'].errors?.['max']">
+                        ${uiField.getDisplayName()} must be less or equal to ${uiField.getMax()?c}
+                    </mat-error>
+                </#if>
+            </#if>
+            <#if uiField.getFieldType().name() == "TEXT">
+                <#if uiField.getMinLength()??>
+                    <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getCodeName()}'].errors?.['minLength']">
+                        ${uiField.getDisplayName()} must be no shorter than ${uiField.getMinLength()?c} characters
+                    </mat-error>
+                </#if>
+                <#if uiField.getMaxLength()??>
+                    <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getCodeName()}'].errors?.['maxLength']">
+                        ${uiField.getDisplayName()} must be no longer than ${uiField.getMaxLength()?c} characters
+                    </mat-error>
+                </#if>
+                <#if uiField.getPattern()??>
+                    <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getCodeName()}'].errors?.['pattern']">
+                        ${uiField.getDisplayName()} is invalid
+                    </mat-error>
+                </#if>
+            </#if>
+                <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getCodeName()}'].errors?.['required']">
+                    ${uiField.getDisplayName()} is required
+                </mat-error>
         </mat-form-field>
     <#elseif uiField.getFieldType().name() == "BOOL">
         <mat-checkbox class="checkbox" formControlName="${prefix}${uiField.getCodeName()}">${uiField.getDisplayName()}</mat-checkbox>

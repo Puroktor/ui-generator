@@ -2,12 +2,11 @@ package ru.vsu.csf.skofenko.ui.generator.spring.factory;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.springframework.lang.Nullable;
-import ru.vsu.csf.skofenko.ui.generator.angular.field.AngularClassField;
-import ru.vsu.csf.skofenko.ui.generator.angular.field.AngularEnumField;
-import ru.vsu.csf.skofenko.ui.generator.angular.field.AngularField;
-import ru.vsu.csf.skofenko.ui.generator.angular.field.AngularListField;
+import ru.vsu.csf.skofenko.ui.generator.angular.field.*;
 import ru.vsu.csf.skofenko.ui.generator.api.field.UIField;
 import ru.vsu.csf.skofenko.ui.generator.spring.annotation.DisplayName;
+import ru.vsu.csf.skofenko.ui.generator.spring.annotation.NumberField;
+import ru.vsu.csf.skofenko.ui.generator.spring.annotation.TextField;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
@@ -31,9 +30,23 @@ public class UIFieldFactory {
         String displayName = getFieldDisplayName(field, filedClass, submitName);
         boolean isRequired = isParentRequired && (field == null || !field.isAnnotationPresent(Nullable.class));
         if (Number.class.isAssignableFrom(filedClass)) {
-            return new AngularField(displayName, submitName, UIField.FieldType.NUMBER, isRequired);
+            Integer min = null, max = null;
+            if (field != null && field.isAnnotationPresent(NumberField.class)) {
+                NumberField annotation = field.getDeclaredAnnotation(NumberField.class);
+                min = annotation.min();
+                max = annotation.max();
+            }
+            return new AngularNumberField(displayName, submitName, isRequired, min, max);
         } else if (String.class.isAssignableFrom(filedClass)) {
-            return new AngularField(displayName, submitName, UIField.FieldType.TEXT, isRequired);
+            Integer minLength = null, maxLength = null;
+            String pattern = null;
+            if (field != null && field.isAnnotationPresent(TextField.class)) {
+                TextField annotation = field.getDeclaredAnnotation(TextField.class);
+                pattern = annotation.pattern();
+                minLength = annotation.minLength();
+                maxLength = annotation.maxLength();
+            }
+            return new AngularTextField(displayName, submitName, isRequired, minLength, maxLength, pattern);
         } else if (filedClass.isEnum()) {
             Map<String, String> submitToDisplayValues = Arrays.stream(filedClass.getFields()).collect(
                     Collectors.toMap(

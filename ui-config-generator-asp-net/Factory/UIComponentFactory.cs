@@ -42,17 +42,17 @@ namespace UIConfigGenerator.Parser
                     Attribute? routeAttr = Attribute.GetCustomAttribute(param, typeof(FromRouteAttribute));
                     if (routeAttr != null)
                     {
-                        FromRouteAttribute routeAttribute = routeAttr as FromRouteAttribute;
                         string displayValue = UIFieldFactory.GetDisplayName(param, param.Name);
-                        string submitValue = routeAttribute.Name ?? UIFieldFactory.SanitizeCodeName(param.Name);
-                        pathParams.Add(UIFieldFactory.CreateField(param.ParameterType, displayValue, submitValue));
+                        FromRouteAttribute? routeAttribute = routeAttr as FromRouteAttribute;
+                        string submitValue = routeAttribute?.Name ?? UIFieldFactory.SanitizeCodeName(param.Name);
+                        pathParams.Add(UIFieldFactory.CreateField(param, param.ParameterType, displayValue, submitValue));
                         continue;
                     }
                     Attribute? queryAttr = Attribute.GetCustomAttribute(param, typeof(FromQueryAttribute));
                     FromQueryAttribute? queryAttribute = queryAttr as FromQueryAttribute;
                     string displayName = UIFieldFactory.GetDisplayName(param, param.Name);
                     string submitName = queryAttribute?.Name ?? UIFieldFactory.SanitizeCodeName(param.Name);
-                    queryParams.Add(UIFieldFactory.CreateField(param.ParameterType, displayName, submitName));
+                    queryParams.Add(UIFieldFactory.CreateField(param, param.ParameterType, displayName, submitName));
                     continue;
                     
                 }
@@ -154,7 +154,7 @@ namespace UIConfigGenerator.Parser
                 .Select(property => {
                     string displayName = UIFieldFactory.GetDisplayName(property, property.Name);
                     string codeName = UIFieldFactory.SanitizeCodeName(property.Name); 
-                    return UIFieldFactory.CreateField(property.PropertyType, displayName, codeName);
+                    return UIFieldFactory.CreateField(property, property.PropertyType, displayName, codeName);
                 })
                 .ToList();
         }

@@ -6,12 +6,12 @@ namespace UIConfigGenerator.Parser
 {
     internal static class UIFieldFactory
     {
-        public static UIField CreateField(Type fieldType, string displayName, string? codeName)
+        public static UIField CreateField(object fieldInfo, Type fieldType, string displayName, string? codeName)
         {
-            return CreateField(fieldType, displayName, codeName, []);
+            return CreateField(fieldInfo, fieldType, displayName, codeName, []);
         }
 
-        private static UIField CreateField(Type fieldType, string? displayName, string? codeName, HashSet<Type> parsedTypesSet)
+        private static UIField CreateField(object? fieldInfo, Type fieldType, string? displayName, string? codeName, HashSet<Type> parsedTypesSet)
         {
             if (parsedTypesSet.Contains(fieldType))
             {
@@ -26,11 +26,28 @@ namespace UIConfigGenerator.Parser
             }
             if (IsNumericType(fieldType))
             {
-                return new UIField() { DisplayName = displayName, CodeName = codeName, FieldType = UIFieldType.NUMBER, Required = isRequired };
+                int? min = null, max = null;
+                if (fieldInfo != null)
+                {
+                    NumberFieldAttribute? attribute = GetFieldAttribure(fieldInfo, typeof(NumberFieldAttribute)) as NumberFieldAttribute;
+                    min = attribute?.Min;
+                    max = attribute?.Max;
+                }
+                return new UINumberField() { DisplayName = displayName, CodeName = codeName, FieldType = UIFieldType.NUMBER, Required = isRequired, Min = min, Max = max };
             }
             else if (fieldType == typeof(string))
             {
-                return new UIField() { DisplayName = displayName, CodeName = codeName, FieldType = UIFieldType.TEXT, Required = isRequired };
+                int? minLength = null, maxLength = null;
+                string? pattern = null;
+                if (fieldInfo != null)
+                {
+                    TextFieldAttribute? attribute = GetFieldAttribure(fieldInfo, typeof(TextFieldAttribute)) as TextFieldAttribute;
+                    minLength = attribute?.MinLength;
+                    maxLength = attribute?.MaxLength;
+                    pattern = attribute?.Pattern;
+                }
+                return new UITextField() { DisplayName = displayName, CodeName = codeName, FieldType = UIFieldType.TEXT, Required = isRequired, 
+                    MinLength = minLength, MaxLength = maxLength, Pattern = pattern};
             }
             else if (fieldType == typeof(bool))
             {
@@ -48,7 +65,7 @@ namespace UIConfigGenerator.Parser
             }
             else if (fieldType.IsArray)
             {
-                UIField element = CreateField(fieldType.GetElementType(), null, null, parsedTypesSet);
+                UIField element = CreateField(null, fieldType.GetElementType(), null, null, parsedTypesSet);
                 return new UIListField() { DisplayName = displayName, CodeName = codeName, FieldType = UIFieldType.LIST, Required = isRequired, Element = element };
             }
             else
@@ -57,7 +74,7 @@ namespace UIConfigGenerator.Parser
                 if (enumerable != null)
                 {
                     Type itemType = enumerable.GenericTypeArguments[0];
-                    UIField element = CreateField(itemType, null, null, parsedTypesSet);
+                    UIField element = CreateField(null, itemType, null, null, parsedTypesSet);
                     return new UIListField() { DisplayName = displayName, CodeName = codeName, FieldType = UIFieldType.LIST, Required = isRequired, Element = element };
                 }
                 else
@@ -68,7 +85,7 @@ namespace UIConfigGenerator.Parser
                     {
                         string innerName = GetDisplayName(innerField, innerField.Name);
                         string innerCodeName = SanitizeCodeName(innerField.Name);
-                        var uiInnerField = CreateField(innerField.PropertyType, innerName, innerCodeName, parsedTypesSet);
+                        var uiInnerField = CreateField(innerField, innerField.PropertyType, innerName, innerCodeName, parsedTypesSet);
                         uiInnerFields.Add(uiInnerField);
                     }
                     return new UIClassField() { DisplayName = displayName, CodeName = codeName, FieldType = UIFieldType.CLASS, Required = isRequired, InnerFields = uiInnerFields };
@@ -113,6 +130,19 @@ namespace UIConfigGenerator.Parser
         private static string GetDisplayName(DisplayNameAttribute? displayNameAttr, string codeName)
         {
             return displayNameAttr != null ? displayNameAttr.Name : codeName;
+        }
+
+        private static Attribute? GetFieldAttribure(object fieldInfo, Type attributeType) 
+        {
+            if (typeof(MemberInfo).IsAssignableFrom(fieldInfo.GetType()))
+            {
+                return Attribute.GetCustomAttribute((MemberInfo)fieldInfo, attributeType);
+            }
+            else if (typeof(ParameterInfo).IsAssignableFrom(fieldInfo.GetType()))
+            {
+                return Attribute.GetCustomAttribute((ParameterInfo)fieldInfo, attributeType);
+            }
+            return null;
         }
 
         public static string SanitizeCodeName(string codeName)

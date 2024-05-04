@@ -18,9 +18,9 @@ import ru.vsu.csf.skofenko.ui.generator.api.field.UIField;
         visible = true
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value=AngularField.class, name="NUMBER"),
-        @JsonSubTypes.Type(value=AngularField.class, name="TEXT"),
         @JsonSubTypes.Type(value=AngularField.class, name="BOOL"),
+        @JsonSubTypes.Type(value=AngularNumberField.class, name="NUMBER"),
+        @JsonSubTypes.Type(value=AngularTextField.class, name="TEXT"),
         @JsonSubTypes.Type(value=AngularClassField.class, name="CLASS"),
         @JsonSubTypes.Type(value=AngularEnumField.class, name="ENUM"),
         @JsonSubTypes.Type(value=AngularListField.class, name="LIST"),

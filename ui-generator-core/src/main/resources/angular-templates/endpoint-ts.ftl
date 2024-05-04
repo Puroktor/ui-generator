@@ -20,7 +20,18 @@ export class ${endpoint.getScriptName()}Component implements OnInit, OnDestroy {
     <#elseif uiField.getFieldType().name() == "LIST">
         "${prefix}${uiField.getCodeName()}" : new FormArray([]),
     <#else>
-        "${prefix}${uiField.getCodeName()}" : new FormControl(<#if uiField.getFieldType().name() == "BOOL">false<#else>null</#if><#if uiField.isRequired()>,Validators.required</#if>),
+        "${prefix}${uiField.getCodeName()}" : new FormControl(<#if uiField.getFieldType().name() == "BOOL">false<#else>null</#if>, [
+            <#if uiField.getFieldType().name() == "NUMBER">
+                <#if uiField.getMin()??>Validators.min(${uiField.getMin()?c}),</#if>
+                <#if uiField.getMax()??>Validators.max(${uiField.getMax()?c}),</#if>
+            </#if>
+            <#if uiField.getFieldType().name() == "TEXT">
+                <#if uiField.getPattern()??>Validators.pattern("${uiField.getPattern()}"),</#if>
+                <#if uiField.getMinLength()??>Validators.minLength(${uiField.getMinLength()?c}),</#if>
+                <#if uiField.getMaxLength()??>Validators.maxLength(${uiField.getMaxLength()?c}),</#if>
+            </#if>
+            <#if uiField.isRequired()>Validators.required,</#if>
+        ]),
     </#if>
 </#macro>
 <#macro renderFormArray uiField prefix>
