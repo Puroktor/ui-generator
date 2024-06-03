@@ -32,6 +32,7 @@ public interface UIField {
         TEXT,
         NUMBER,
         BOOL,
+        DATE,
         ENUM,
         LIST,
         CLASS

@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="baseUrl" type="java.lang.String" -->
 {
-    "/api/*": {
+    "/api": {
         "target": "${baseUrl}",
         "secure": false,
         "headers": {

@@ -16,8 +16,9 @@ class UIFieldType(Enum):
     NUMBER = 2
     BOOL = 3
     ENUM = 4
-    LIST = 5
-    CLASS = 6
+    DATE = 5
+    LIST = 6
+    CLASS = 7
 
 
 @dataclass
@@ -45,6 +46,9 @@ class UITextField(UIField):
 class UIEnumField(UIField):
     submit_to_display_values: Dict[str, str]
 
+@dataclass
+class UIDateField(UIField):
+    date_format: str
 
 @dataclass
 class UIListField(UIField):

@@ -2,6 +2,7 @@ import dataclasses
 import inspect
 import typing
 from dataclasses import fields
+from datetime import date
 from enum import Enum
 from itertools import repeat
 from typing import get_args, Optional
@@ -9,7 +10,7 @@ from typing import get_args, Optional
 from flask import Blueprint, Flask
 
 from .config import UIEndpoint, UIComponent, UIRequestType, UIField, UIFieldType, UIRequestBody, UIEnumField, \
-    UIListField, UIClassField, UITextField, UINumberField
+    UIListField, UIClassField, UITextField, UINumberField, UIDateField
 
 
 class UIComponentFactory:
@@ -40,7 +41,7 @@ class UIComponentFactory:
                 query_params = []
                 for param in func.query_params:
                     query_param = UIFieldsFactory.create_field(param['type'], param['display_name'],
-                                                               param['submit_name'], param['validations'])
+                                                               param['submit_name'], param['options'])
                     query_params.append(query_param)
             if hasattr(func, 'response_body'):
                 response_body = UIFieldsFactory.create_fields(func.response_body)
@@ -54,7 +55,7 @@ class UIComponentFactory:
                     field_type = type(str) if param.annotation is None else param.annotation
                     param_info = next((x for x in param_display_names if x['submit_name'] == name), {})
                     display_name = param_info.get('display_name', None)
-                    ui_field = UIFieldsFactory.create_field(field_type, display_name, name, param_info['validations'])
+                    ui_field = UIFieldsFactory.create_field(field_type, display_name, name, param_info['options'])
                     mapping = mapping.replace(f'<{name}>', '{' + name + '}')
                     path_params.append(ui_field)
             for method in rule.methods:
@@ -79,14 +80,14 @@ class UIFieldsFactory:
             name = field.metadata.get('display_name')
             if name is None:
                 name = field.name
-            validations = dict(field.metadata.items())
-            ui_field = UIFieldsFactory.create_field(field.type, name, field.name, validations)
+            options = dict(field.metadata.items())
+            ui_field = UIFieldsFactory.create_field(field.type, name, field.name, options)
             ui_fields.append(ui_field)
         return ui_fields
 
     @staticmethod
     def create_field(field_type: type, display_name: Optional[str], code_name: Optional[str],
-                     validations: Optional[dict[str, typing.Any]]) -> UIField:
+                     options: Optional[dict[str, typing.Any]]) -> UIField:
         # Check if field is optional
         if hasattr(field_type, '__args__') and len(field_type.__args__) == 2 and field_type.__args__[-1] is type(None):
             required = False
@@ -96,19 +97,22 @@ class UIFieldsFactory:
         if hasattr(field_type, '__args__') and len(field_type.__args__) == 2 and field_type.__args__[-1] is type(None):
             required = False
             field_type = field_type.__args__[0]
-        if validations is None:
-            validations = {}
+        if options is None:
+            options = {}
         if issubclass(field_type, bool):
             return UIField(display_name=display_name, code_name=code_name, field_type=UIFieldType.BOOL,
                            required=required)
-        if issubclass(field_type, str):
+        if issubclass(field_type, str) and 'date_format' not in options:
             return UITextField(display_name=display_name, code_name=code_name, field_type=UIFieldType.TEXT,
-                               required=required, pattern=validations.get('pattern', None),
-                               min_length=validations.get('min_length', None),
-                               max_length=validations.get('max_length', None))
+                               required=required, pattern=options.get('pattern', None),
+                               min_length=options.get('min_length', None),
+                               max_length=options.get('max_length', None))
         if issubclass(field_type, int) or issubclass(field_type, float):
             return UINumberField(display_name=display_name, code_name=code_name, field_type=UIFieldType.NUMBER,
-                                 required=required, min=validations.get('min', None), max=validations.get('max', None))
+                                 required=required, min=options.get('min', None), max=options.get('max', None))
+        if issubclass(field_type, date) or (issubclass(field_type, str) and 'date_format' in options):
+            return UIDateField(display_name=display_name, code_name=code_name, field_type=UIFieldType.DATE,
+                               required=required, date_format=options.get('date_format', 'yyyy-MM-dd'))
         if issubclass(field_type, Enum):
             values = dict()
             for value in field_type:

@@ -22,6 +22,7 @@ import ru.vsu.csf.skofenko.ui.generator.api.field.UIField;
         @JsonSubTypes.Type(value=AngularNumberField.class, name="NUMBER"),
         @JsonSubTypes.Type(value=AngularTextField.class, name="TEXT"),
         @JsonSubTypes.Type(value=AngularClassField.class, name="CLASS"),
+        @JsonSubTypes.Type(value=AngularDateField.class, name="DATE"),
         @JsonSubTypes.Type(value=AngularEnumField.class, name="ENUM"),
         @JsonSubTypes.Type(value=AngularListField.class, name="LIST"),
 })

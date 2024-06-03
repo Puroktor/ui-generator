@@ -4,6 +4,7 @@ import org.apache.commons.lang3.ClassUtils;
 import org.springframework.lang.Nullable;
 import ru.vsu.csf.skofenko.ui.generator.angular.field.*;
 import ru.vsu.csf.skofenko.ui.generator.api.field.UIField;
+import ru.vsu.csf.skofenko.ui.generator.spring.annotation.DateField;
 import ru.vsu.csf.skofenko.ui.generator.spring.annotation.DisplayName;
 import ru.vsu.csf.skofenko.ui.generator.spring.annotation.NumberField;
 import ru.vsu.csf.skofenko.ui.generator.spring.annotation.TextField;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 
 public class UIFieldFactory {
 
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+
     public static UIField createUIField(AnnotatedElement field, Type filedType, String submitName) {
         return createUIField(field, filedType, submitName, new HashSet<>(), true);
     }
@@ -29,6 +32,7 @@ public class UIFieldFactory {
         }
         String displayName = getFieldDisplayName(field, filedClass, submitName);
         boolean isRequired = isParentRequired && (field == null || !field.isAnnotationPresent(Nullable.class));
+        Optional<DateField> dateAnnotation = Optional.ofNullable(field).map(f -> f.getDeclaredAnnotation(DateField.class));
         if (Number.class.isAssignableFrom(filedClass)) {
             Integer min = null, max = null;
             if (field != null && field.isAnnotationPresent(NumberField.class)) {
@@ -37,7 +41,7 @@ public class UIFieldFactory {
                 max = annotation.max();
             }
             return new AngularNumberField(displayName, submitName, isRequired, min, max);
-        } else if (String.class.isAssignableFrom(filedClass)) {
+        } else if (String.class.isAssignableFrom(filedClass) && dateAnnotation.isEmpty()) {
             Integer minLength = null, maxLength = null;
             String pattern = null;
             if (field != null && field.isAnnotationPresent(TextField.class)) {
@@ -47,7 +51,12 @@ public class UIFieldFactory {
                 maxLength = annotation.maxLength();
             }
             return new AngularTextField(displayName, submitName, isRequired, minLength, maxLength, pattern);
-        } else if (filedClass.isEnum()) {
+        } else if (Date.class.isAssignableFrom(filedClass) ||
+                    String.class.isAssignableFrom(filedClass) && dateAnnotation.isPresent()) {
+            String format = dateAnnotation.map(DateField::value).orElse(DEFAULT_DATE_FORMAT);
+            return new AngularDateField(displayName, submitName, isRequired, format);
+        }
+        else if (filedClass.isEnum()) {
             Map<String, String> submitToDisplayValues = Arrays.stream(filedClass.getFields()).collect(
                     Collectors.toMap(
                             Field::getName, enumField -> getFieldDisplayName(enumField, enumField.getType(), enumField.getName())

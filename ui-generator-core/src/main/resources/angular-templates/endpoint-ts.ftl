@@ -1,14 +1,35 @@
 <#-- @ftlvariable name="endpoint" type="ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint" -->
 <#-- @ftlvariable name="componentName" type="java.lang.String" -->
+<#-- @ftlvariable name="dateFormat" type="java.lang.String" -->
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup, FormControl, FormArray, Validators} from '@angular/forms';
 import {HttpResponse, HttpErrorResponse} from "@angular/common/http";
 import {AppService} from '../../service/app.service';
+<#if dateFormat??>
+import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
+import {formatDate} from '@angular/common';
+export const DATE_FORMAT = {
+    parse: {
+        dateInput: "${dateFormat}"
+    },
+    display: {
+        dateInput: "${dateFormat}",
+        monthYearLabel: "MMM YYYY",
+        dateA11yLabel: "${dateFormat}",
+        monthYearA11yLabel: "MMM YYYY"
+    }
+};
+</#if>
 
 @Component({
     selector: 'app-${componentName}-${endpoint.getFileName()}',
     templateUrl: './${endpoint.getFileName()}.component.html',
-    styleUrls: ['./${endpoint.getFileName()}.component.css']
+    styleUrls: ['./${endpoint.getFileName()}.component.css'],
+    <#if dateFormat??>
+    providers: [
+        provideMomentDateAdapter(DATE_FORMAT),
+    ]
+    </#if>
 })
 export class ${endpoint.getScriptName()}Component implements OnInit, OnDestroy {
 
@@ -20,7 +41,7 @@ export class ${endpoint.getScriptName()}Component implements OnInit, OnDestroy {
     <#elseif uiField.getFieldType().name() == "LIST">
         "${prefix}${uiField.getCodeName()}" : new FormArray([]),
     <#else>
-        "${prefix}${uiField.getCodeName()}" : new FormControl(<#if uiField.getFieldType().name() == "BOOL">false<#else>null</#if>, [
+        "${prefix}${uiField.getCodeName()}<#if uiField.getFieldType().name() == "DATE">$date</#if>" : new FormControl(<#if uiField.getFieldType().name() == "BOOL">false<#else>null</#if>, [
             <#if uiField.getFieldType().name() == "NUMBER">
                 <#if uiField.getMin()??>Validators.min(${uiField.getMin()?c}),</#if>
                 <#if uiField.getMax()??>Validators.max(${uiField.getMax()?c}),</#if>
@@ -99,7 +120,23 @@ export class ${endpoint.getScriptName()}Component implements OnInit, OnDestroy {
             return;
         }
         this.formGroup.disable();
-        this.appService.submitForm(this.requestType, this.mapping, this.formGroup.value).subscribe({
+        <#if dateFormat??>
+            const values: any = {};
+            const datePostfix = "$date";
+            for (const [key, value] of Object.entries(this.formGroup.value)) {
+                if (key.endsWith(datePostfix)) {
+                    const newKey = key.slice(0, -datePostfix.length)
+                    const oldValue = value as unknown as string;
+                    values[newKey] = formatDate(oldValue, "${dateFormat}", $localize.locale ?? 'en');
+                } else {
+                    values[key] = value;
+                }
+            }
+        <#else>
+            const values = this.formGroup.value;
+        </#if>
+
+        this.appService.submitForm(this.requestType, this.mapping, values).subscribe({
             next: (response: HttpResponse<any>) => {
                 this.response = response;
                 this.responseTableData = [response.body];

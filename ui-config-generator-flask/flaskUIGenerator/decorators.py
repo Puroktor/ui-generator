@@ -26,7 +26,7 @@ def path_param(submit_name: str, display_name: str, **options: typing.Any):
         func.path_params.append({
             'submit_name': submit_name,
             'display_name': display_name,
-            'validations': options
+            'options': options
         })
         return func
 
@@ -41,7 +41,7 @@ def query_param(value: type, submit_name: str, display_name: Optional[str] = Non
             'submit_name': submit_name,
             'display_name': submit_name if display_name is None else display_name,
             'type': value,
-            'validations': options
+            'options': options
         })
         return func
 

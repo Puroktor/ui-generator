@@ -15,6 +15,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSelectModule} from '@angular/material/select';
 import {MatIconModule} from '@angular/material/icon';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import {NgxJsonViewerModule} from 'ngx-json-viewer';
 import {HttpClientModule} from '@angular/common/http';
 
@@ -60,6 +61,7 @@ import {${endpoint.getScriptName()}Component} from './${component.getFileName()}
         MatCheckboxModule,
         MatSelectModule,
         MatIconModule,
+        MatDatepickerModule,
         NgxJsonViewerModule,
     ],
     providers: [],

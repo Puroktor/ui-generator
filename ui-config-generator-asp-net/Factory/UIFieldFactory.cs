@@ -19,6 +19,11 @@ namespace UIConfigGenerator.Parser
             }
             bool isRequired = true;
             Type? nullable = Nullable.GetUnderlyingType(fieldType);
+            DateFieldAttribute? dateFieldAttribute = null;
+            if (fieldInfo != null)
+            {
+                dateFieldAttribute = GetFieldAttribure(fieldInfo, typeof(DateFieldAttribute)) as DateFieldAttribute;
+            }
             if (nullable != null)
             {
                 isRequired = false;
@@ -35,7 +40,7 @@ namespace UIConfigGenerator.Parser
                 }
                 return new UINumberField() { DisplayName = displayName, CodeName = codeName, FieldType = UIFieldType.NUMBER, Required = isRequired, Min = min, Max = max };
             }
-            else if (fieldType == typeof(string))
+            else if (fieldType == typeof(string) && dateFieldAttribute == null)
             {
                 int? minLength = null, maxLength = null;
                 string? pattern = null;
@@ -48,6 +53,22 @@ namespace UIConfigGenerator.Parser
                 }
                 return new UITextField() { DisplayName = displayName, CodeName = codeName, FieldType = UIFieldType.TEXT, Required = isRequired, 
                     MinLength = minLength, MaxLength = maxLength, Pattern = pattern};
+            }
+            else if (fieldType == typeof(DateOnly) || (fieldType == typeof(string) && dateFieldAttribute != null))
+            {
+                string format = DateFieldAttribute.DEFAULT_DATE_FORMAT;
+                if (dateFieldAttribute != null)
+                {
+                    format = dateFieldAttribute.DateFormat;
+                }
+                return new UIDateField()
+                {
+                    DisplayName = displayName,
+                    CodeName = codeName,
+                    FieldType = UIFieldType.DATE,
+                    Required = isRequired,
+                    DateFormat = format
+                };
             }
             else if (fieldType == typeof(bool))
             {

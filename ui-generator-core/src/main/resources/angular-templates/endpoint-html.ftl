@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="endpoint" type="ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint" -->
 
 <#macro renderField uiField prefix>
-    <#if uiField.getFieldType().name() == "TEXT" || uiField.getFieldType().name() == "NUMBER" ||  uiField.getFieldType().name() == "ENUM">
+    <#if uiField.getFieldType().name() == "TEXT" || uiField.getFieldType().name() == "NUMBER" ||  uiField.getFieldType().name() == "ENUM" ||  uiField.getFieldType().name() == "DATE">
         <mat-form-field class="long-field">
             <mat-label i18n>${uiField.getDisplayName()}</mat-label>
             <#if uiField.getFieldType().name() == "ENUM">
@@ -10,8 +10,12 @@
                     <mat-option value="${submitName}" i18n>${displayName}</mat-option>
                 </#list>
             </mat-select>
-            <#else>
+            <#elseif uiField.getFieldType().name() == "TEXT" || uiField.getFieldType().name() == "NUMBER">
             <input matInput formControlName="${prefix}${uiField.getCodeName()}" <#if uiField.getFieldType().name() == "NUMBER">type="number"</#if>>
+            <#elseif uiField.getFieldType().name() == "DATE">
+            <input matInput [matDatepicker]="datepicker$${prefix}${uiField.getCodeName()}" formControlName="${prefix}${uiField.getCodeName()}$date">
+            <mat-datepicker-toggle matIconSuffix [for]="datepicker$${prefix}${uiField.getCodeName()}"></mat-datepicker-toggle>
+            <mat-datepicker #datepicker$${prefix}${uiField.getCodeName()}></mat-datepicker>
             </#if>
             <#if uiField.getFieldType().name() == "NUMBER">
                  <#if uiField.getMin()??>
@@ -42,7 +46,7 @@
                     </mat-error>
                 </#if>
             </#if>
-                <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getCodeName()}'].errors?.['required']" i18n>
+                <mat-error *ngIf="formGroup.controls['${prefix}${uiField.getCodeName()}<#if uiField.getFieldType().name() == "DATE">$date</#if>'].errors?.['required']" i18n>
                     ${uiField.getDisplayName()} is required
                 </mat-error>
         </mat-form-field>
@@ -65,8 +69,13 @@
                                     <mat-option value="${submitName}" i18n>${displayName}</mat-option>
                                 </#list>
                             </mat-select>
-                        <#else>
+                        <#elseif uiField.getFieldType().name() == "TEXT" || uiField.getFieldType().name() == "NUMBER">
                             <input matInput [formControlName]="i" <#if uiField.getElement().getFieldType().name() == "NUMBER">type="number"</#if>>
+                        <#elseif uiField.getElement().getFieldType().name() == "DATE">
+                            <input matInput [matDatepicker]="datepicker$${prefix}${uiField.getCodeName()}{{i}}" formControlName="i">
+                            <mat-datepicker-toggle matIconSuffix [for]="datepicker$${prefix}${uiField.getCodeName()}{{i}}"></mat-datepicker-toggle>
+                            <mat-datepicker #datepicker$${prefix}${uiField.getCodeName()}{{i}}></mat-datepicker>
+                        <#else>
                         </#if>
                         <mat-error *ngIf="item.hasError('required')" i18n>
                             Element is required

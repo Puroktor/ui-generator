@@ -6,6 +6,7 @@
         NUMBER,
         BOOL,
         ENUM,
+        DATE,
         LIST,
         CLASS
     }

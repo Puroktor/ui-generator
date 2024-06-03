@@ -7,6 +7,7 @@ namespace UIConfigGenerator.Config
     [JsonDerivedType(typeof(UIEnumField))]
     [JsonDerivedType(typeof(UITextField))]
     [JsonDerivedType(typeof(UINumberField))]
+    [JsonDerivedType(typeof(UIDateField))]
     internal class UIField
     {
         public string? DisplayName { get; set; }
