@@ -9,7 +9,7 @@ public interface UI extends Runnable {
     /**
      * Returns server base url.
      * It is used for configuration of request proxying on tje frontend.
-    */
+     */
     String getBaseUrl();
 
     /**

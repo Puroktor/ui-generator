@@ -3,10 +3,10 @@
     <#list components as component>
     <a mat-button routerLink="/${component.getFileName()}"
        routerLinkActive="active-header-link"
-       [routerLinkActiveOptions]="{exact: true}">${component.getDisplayName()}</a>
+       [routerLinkActiveOptions]="{exact: true}" i18n>${component.getDisplayName()}</a>
     </#list>
     <span class="header-spacer"></span>
     <a mat-button routerLink=""
        routerLinkActive="active-header-link"
-       [routerLinkActiveOptions]="{exact: true}">Info</a>
+       [routerLinkActiveOptions]="{exact: true}" i18n>Info</a>
 </mat-toolbar>

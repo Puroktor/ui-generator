@@ -12,7 +12,8 @@ public class UIGenerator {
         UI ui = UIConfigParser.parseConfig(arguments.getEngine(), arguments.getConfigPath());
         ui.create(arguments.isOverride());
         if (arguments.isStartup()) {
-            ui.run();
+            Thread thread = new Thread(ui);
+            thread.start();
         }
     }
 }

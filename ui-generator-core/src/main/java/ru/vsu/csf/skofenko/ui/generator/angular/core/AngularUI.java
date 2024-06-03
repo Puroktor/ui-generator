@@ -11,7 +11,6 @@ import ru.vsu.csf.skofenko.ui.generator.api.UIComponent;
 import ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -65,12 +64,11 @@ public class AngularUI implements UI {
         }
     }
 
-    @Override
     public void run() {
         try {
             File directory = RESOURCES_PATH.resolve(FRONTEND_DIR_NAME).toFile();
             File logs = RESOURCES_PATH.resolve(FRONTEND_LOGS_FILE).toFile();
-            new FileWriter(logs).close();
+            logs.createNewFile();
             new ProcessBuilder("npm.cmd", "install").directory(directory).start().waitFor();
             Process process = new ProcessBuilder("ng.cmd", "serve")
                     .directory(directory)
@@ -81,9 +79,11 @@ public class AngularUI implements UI {
                 process.toHandle().children().forEach(ProcessHandle::destroy);
                 process.destroy();
             }));
+            process.waitFor();
         } catch (Exception e) {
             throw new RuntimeException("Error during frontend startup", e);
         }
+
     }
 
     @Override
