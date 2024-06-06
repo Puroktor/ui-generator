@@ -86,3 +86,9 @@
 .response-header-container > h3 {
     font-weight: 500;
 }
+
+.checkbox {
+    --mat-checkbox-label-text-size: 15px;
+    --mat-checkbox-label-text-weight: 500;
+    --mat-checkbox-label-text-color: rgba(0, 0, 0, 0.54);
+}

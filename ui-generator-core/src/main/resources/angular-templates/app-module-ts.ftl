@@ -23,6 +23,7 @@ import {AppRoutingModule, routingComponents} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './header/header.component';
 import {ResponseComponent} from './response/response.component';
+import {LanguageComponent} from './language/language.component';
 
 <#list components as component>
 <#list component.getEndpoints() as endpoint>
@@ -35,6 +36,7 @@ import {${endpoint.getScriptName()}Component} from './${component.getFileName()}
         AppComponent,
         HeaderComponent,
         ResponseComponent,
+        LanguageComponent,
         routingComponents,
 
         <#list components as component>

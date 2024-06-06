@@ -7,10 +7,17 @@ import {${component.getScriptName()}Component} from "./${component.getFileName()
 </#list>
 
 const routes: Routes = [
-    {path: '', component: InfoComponent},
-<#list components as component>
-    {path: '${component.getFileName()}', component: ${component.getScriptName()}Component},
-</#list>
+    {
+        path: ':lang',
+        children: [
+            {path: '', component: InfoComponent},
+        <#list components as component>
+            {path: '${component.getFileName()}', component: ${component.getScriptName()}Component},
+        </#list>
+        ]
+    },
+    {path: '', redirectTo: 'en', pathMatch: 'full'},
+    {path: '**', redirectTo: 'en' }
 ];
 
 @NgModule({

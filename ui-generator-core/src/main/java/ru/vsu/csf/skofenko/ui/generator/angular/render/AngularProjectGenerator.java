@@ -2,7 +2,6 @@ package ru.vsu.csf.skofenko.ui.generator.angular.render;
 
 import freemarker.template.TemplateException;
 import lombok.experimental.UtilityClass;
-import ru.vsu.csf.skofenko.ui.generator.angular.core.AngularComponent;
 import ru.vsu.csf.skofenko.ui.generator.api.UIComponent;
 import ru.vsu.csf.skofenko.ui.generator.api.UIEndpoint;
 import ru.vsu.csf.skofenko.ui.generator.api.field.UIDateField;
@@ -67,14 +66,6 @@ public class AngularProjectGenerator {
         File routingModule = new File(projectDir, "src/app/app-routing.module.ts");
         AngularTemplateRenderer.renderTemplate(routingModule,
                 AngularTemplateRenderer.TemplateFile.ROUTING_MODULE, Map.of("components", components));
-
-        AngularComponent headerComponent = new AngularComponent();
-        headerComponent.setDisplayName("header");
-        headerComponent.createNames();
-
-        File headerTS = new File(projectDir, "src/app/header/header.component.ts");
-        AngularTemplateRenderer.renderTemplate(headerTS,
-                AngularTemplateRenderer.TemplateFile.COMPONENT_TS, Map.of("component", headerComponent));
 
         File headerHTML = new File(projectDir, "src/app/header/header.component.html");
         AngularTemplateRenderer.renderTemplate(headerHTML,

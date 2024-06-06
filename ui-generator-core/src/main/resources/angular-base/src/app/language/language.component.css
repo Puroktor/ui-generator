@@ -1,0 +1,9 @@
+mat-select {
+    width: 75px;
+    margin-bottom: 6px;
+    color: var(--mat-toolbar-container-text-color);
+    --mat-select-enabled-arrow-color: --mat-toolbar-container-text-color;
+    font-size: var(--mdc-text-button-label-text-size);
+    font-weight: var(--mdc-text-button-label-text-weight);
+    letter-spacing: var(--mdc-text-button-label-text-tracking);
+}
